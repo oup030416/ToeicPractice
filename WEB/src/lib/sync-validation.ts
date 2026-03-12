@@ -96,14 +96,6 @@ function buildItemIndexes(sync: ToeicWebSyncV1) {
   }
 }
 
-function hasRequiredPracticeAttemptFields(
-  payload: ReturnType<typeof attemptPayloadSchema.safeParse> extends { success: true }
-    ? never
-    : never,
-) {
-  return payload
-}
-
 export function validateToeicWebSync(
   sync: ToeicWebSyncV1,
   rawText: string,
