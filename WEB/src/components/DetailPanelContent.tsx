@@ -1,55 +1,65 @@
 import { Search } from 'lucide-react'
 
 import type { DetailPanelState, LoadedDocument } from '../App'
-import { Badge } from './Badge'
-import { EmptyMessage, InfoRow, MaterialSection } from './DashboardBlocks'
-import { formatDateTime, formatNumber, safePrettyJson } from '../lib/format'
+import { getValueAtPath, type EditableDocumentState } from '../lib/editor-state'
+import { formatDateTime, formatNumber } from '../lib/format'
 import type { EventCardView } from '../lib/sync-view-model'
+import { Badge } from './Badge'
+import { EmptyMessage, InfoRow } from './DashboardBlocks'
+import type { CommitMessage } from './detail-editor-types'
+import { buildFallbackEventCards, asArray } from './editor-utils'
+import { EventEditor } from './EventEditor'
+import { LookupsEditor } from './LookupsEditor'
+import { MaterialsEditor } from './MaterialsEditor'
+import { MetaEditor } from './MetaEditor'
 
 export function DetailPanelContent({
   panel,
   loadedDocument,
+  editorState,
   selectedEvent,
   filteredEvents,
   eventQuery,
   onEventQueryChange,
   onOpenEvent,
+  onCommitDraftChange,
 }: {
   panel: DetailPanelState
   loadedDocument: LoadedDocument | null
+  editorState: EditableDocumentState
   selectedEvent: EventCardView | null
   filteredEvents: EventCardView[]
   eventQuery: string
   onEventQueryChange: (value: string) => void
   onOpenEvent: (eventId: string) => void
+  onCommitDraftChange: (nextPresent: unknown, message: CommitMessage) => void
 }) {
-  if (!loadedDocument) {
+  if (!editorState.present) {
     return <EmptyMessage text="먼저 JSON 파일을 업로드해 주세요." />
   }
 
-  const viewModel = loadedDocument.viewModel
+  const fallbackEventCards = buildFallbackEventCards(
+    asArray(getValueAtPath(editorState.present, ['events'])),
+  )
+  const visibleEvents = loadedDocument?.viewModel
+    ? filteredEvents
+    : fallbackEventCards.filter((event) =>
+        event.searchableText.includes(eventQuery.trim().toLowerCase()),
+      )
 
-  if (panel?.type === 'event' && selectedEvent) {
+  if (panel?.type === 'meta') {
     return (
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone={selectedEvent.tone}>{selectedEvent.eventType}</Badge>
-          <Badge>{selectedEvent.actor}</Badge>
-          <Badge>{selectedEvent.entityType}</Badge>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <InfoRow label="기록 시각" value={formatDateTime(selectedEvent.timestamp)} />
-          <InfoRow label="엔터티 ID" value={selectedEvent.entityId} />
-          <InfoRow label="세션 ID" value={selectedEvent.sessionId} />
-          <InfoRow label="시도 ID" value={selectedEvent.attemptId} />
-        </div>
-        <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-          <p className="font-medium text-slate-900">{selectedEvent.description}</p>
-        </div>
-        <pre className="overflow-auto rounded-3xl bg-slate-950 p-4 text-sm leading-6 text-slate-100">
-          {safePrettyJson(selectedEvent.payload)}
-        </pre>
-      </div>
+      <MetaEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
+    )
+  }
+
+  if (panel?.type === 'event') {
+    return (
+      <EventEditor
+        draft={editorState.present}
+        eventId={selectedEvent?.id ?? panel.eventId}
+        onCommitDraftChange={onCommitDraftChange}
+      />
     )
   }
 
@@ -67,11 +77,10 @@ export function DetailPanelContent({
           />
         </label>
         <p className="text-sm leading-6 text-slate-500">
-          검색 결과를 부드럽게 반영하도록 입력을 지연 처리합니다. 현재{' '}
-          {formatNumber(filteredEvents.length)}개 이벤트를 표시 중입니다.
+          현재 {formatNumber(visibleEvents.length)}개 이벤트를 표시 중입니다.
         </p>
         <div className="space-y-3">
-          {filteredEvents.map((event) => (
+          {visibleEvents.map((event) => (
             <button
               className="w-full rounded-3xl border border-slate-200 p-4 text-left hover:border-blue-300 hover:bg-blue-50"
               key={event.id}
@@ -93,58 +102,30 @@ export function DetailPanelContent({
 
   if (panel?.type === 'lookups') {
     return (
-      <div className="space-y-5">
-        <div className="grid gap-3 sm:grid-cols-2">
-          {viewModel.lookupSummary.map((item) => (
-            <article
-              className="rounded-3xl border border-slate-200 bg-slate-50 p-4"
-              key={item.key}
-            >
-              <p className="text-sm text-slate-500">{item.key}</p>
-              <p className="mt-2 font-mono text-2xl font-semibold text-slate-950">
-                {formatNumber(item.count)}
-              </p>
-            </article>
-          ))}
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          {viewModel.lookupSections.map((section) => (
-            <section className="rounded-3xl border border-slate-200 p-4" key={section.title}>
-              <h3 className="font-medium text-slate-900">{section.title}</h3>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {section.items.map((item) => (
-                  <Badge key={`${section.title}-${item}`}>{item}</Badge>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
+      <LookupsEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
     )
   }
 
   if (panel?.type === 'materials') {
     return (
-      <div className="space-y-6">
-        <MaterialSection
-          cards={viewModel.materialsSummary.officialCards}
-          emptyText="공식 세트가 아직 비어 있습니다."
-          title="공식 세트"
-        />
-        <MaterialSection
-          cards={viewModel.materialsSummary.drillCards}
-          emptyText="드릴 세트가 아직 비어 있습니다."
-          title="드릴 세트"
-        />
-      </div>
+      <MaterialsEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
     )
   }
 
   if (panel?.type === 'raw') {
     return (
-      <pre className="overflow-auto rounded-3xl bg-slate-950 p-4 text-sm leading-6 text-slate-100">
-        {loadedDocument.rawText}
-      </pre>
+      <div className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <InfoRow label="드래프트 저장 시각" value={formatDateTime(editorState.savedAt)} />
+          <InfoRow
+            label="현재 다운로드 가능 여부"
+            value={editorState.isDownloadable ? '가능' : '차단'}
+          />
+        </div>
+        <pre className="overflow-auto rounded-3xl bg-slate-950 p-4 text-sm leading-6 text-slate-100">
+          {editorState.rawText}
+        </pre>
+      </div>
     )
   }
 
@@ -154,7 +135,7 @@ export function DetailPanelContent({
         <Badge tone="accent">준비 중</Badge>
         <p className="font-medium">RC 문제 풀기 상세 UI는 아직 구현하지 않았습니다.</p>
         <p className="text-sm leading-6 text-slate-700">
-          이번 v1에서는 진입 버튼과 준비 중 패널만 제공합니다. 이후 Part 5/6/7
+          이번 단계에서는 진입 버튼과 준비 중 패널만 제공합니다. 이후 Part 5/6/7
           문항 표시, 응답 입력, 타이머, 정답 대조, 이벤트 기록 작성 계층을 이 패널
           기준으로 확장합니다.
         </p>
