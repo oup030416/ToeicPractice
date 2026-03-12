@@ -27,6 +27,8 @@ export const RECOMMENDATION_STRENGTH_VALUES = [
   'high',
   'critical',
 ] as const
+export const PRACTICE_NOTE_TARGET_TYPES = ['practice_attempt'] as const
+export const PRACTICE_AVAILABILITY_VALUES = ['available', 'issued'] as const
 
 export const KNOWN_WEB_EVENT_TYPES = [
   'session.recorded',
@@ -61,6 +63,8 @@ const timePressureSchema = z.enum(TIME_PRESSURE_VALUES)
 const errorTypeSchema = z.enum(ERROR_TYPE_VALUES)
 const reviewStateSchema = z.enum(REVIEW_STATE_VALUES)
 const recommendationStrengthSchema = z.enum(RECOMMENDATION_STRENGTH_VALUES)
+const practiceNoteTargetTypeSchema = z.enum(PRACTICE_NOTE_TARGET_TYPES)
+const practiceAvailabilitySchema = z.enum(PRACTICE_AVAILABILITY_VALUES)
 
 const metaSchema = z
   .object({
@@ -97,6 +101,39 @@ const lookupsSchema = z
   })
   .passthrough()
 
+export const rcChoiceSchema = z
+  .object({
+    key: z.string().min(1),
+    text: z.string(),
+  })
+  .passthrough()
+
+export const rcPassageSchema = z
+  .object({
+    passage_id: z.string(),
+    title: z.string().optional(),
+    body: z.string(),
+    order: z.number().optional(),
+  })
+  .passthrough()
+
+export const rcQuestionItemSchema = z
+  .object({
+    item_id: z.string(),
+    question_no: z.number(),
+    part: partSchema,
+    question_type: z.string(),
+    skill_tag: z.string(),
+    vocab_domain: z.string(),
+    document_genre: z.string(),
+    stem: z.string(),
+    choices: z.array(rcChoiceSchema).min(2),
+    correct_answer: z.string(),
+    passage_refs: z.array(z.string()).optional(),
+    explanation: z.string().optional(),
+  })
+  .passthrough()
+
 const officialSetSchema = z
   .object({
     set_id: z.string(),
@@ -106,8 +143,8 @@ const officialSetSchema = z
     region: z.literal('KR'),
     part: partSchema,
     document_genre: z.string(),
-    passages: z.array(z.unknown()),
-    items: z.array(z.unknown()),
+    passages: z.array(rcPassageSchema),
+    items: z.array(rcQuestionItemSchema),
     imported_at: z.string(),
     notes: z.union([z.string(), z.null()]).optional(),
   })
@@ -122,7 +159,8 @@ const drillSetSchema = z
     target_part: partSchema,
     target_skill: z.string(),
     difficulty: z.string(),
-    items: z.array(z.unknown()),
+    passages: z.array(rcPassageSchema).optional(),
+    items: z.array(rcQuestionItemSchema),
     answer_key: z.unknown(),
     rationale: z.unknown(),
     review_status: reviewStateSchema,
@@ -198,6 +236,12 @@ export const attemptPayloadSchema = z.object({
   accuracy: z.number(),
   time_pressure: timePressureSchema,
   next_action: z.string(),
+  attempt_id: z.string().optional(),
+  origin: z.literal('rc-practice').optional(),
+  source_set_id: z.string().optional(),
+  source_kind: sourceKindSchema.optional(),
+  answered_question_nos: z.array(z.number()).optional(),
+  wrong_question_nos: z.array(z.number()).optional(),
 })
 
 export const answeredPayloadSchema = z.object({
@@ -214,10 +258,30 @@ export const answeredPayloadSchema = z.object({
   error_type: errorTypeSchema,
   time_pressure: timePressureSchema,
   note: z.string(),
+  attempt_id: z.string().optional(),
+  item_id: z.string().optional(),
+})
+
+export const studyNotePayloadSchema = z.object({
+  note_id: z.string(),
+  target_type: practiceNoteTargetTypeSchema,
+  target_attempt_id: z.string(),
+  content: z.string(),
+})
+
+export const rawRecordCorrectedPayloadSchema = z.object({
+  target_type: z.literal('practice_item_pool'),
+  source_set_id: z.string(),
+  source_kind: sourceKindSchema,
+  item_id: z.string(),
+  question_no: z.number(),
+  availability: practiceAvailabilitySchema,
 })
 
 const knownPayloadSchemas: Record<string, z.ZodTypeAny> = {
   'attempt.recorded': attemptPayloadSchema,
+  'study_note.recorded': studyNotePayloadSchema,
+  'raw_record.corrected': rawRecordCorrectedPayloadSchema,
   'rc_item.answered': answeredPayloadSchema,
   'drill_item.answered': answeredPayloadSchema,
   'rc_weakness.recomputed': weaknessPayloadSchema,
@@ -294,6 +358,13 @@ export const toeicWebSyncSchema = z
 export type ToeicWebSyncV1 = z.infer<typeof toeicWebSyncSchema>
 export type ToeicWebSyncEvent = ToeicWebSyncV1['events'][number]
 export type ToeicLookups = ToeicWebSyncV1['lookups']
+export type RcChoiceV1 = z.infer<typeof rcChoiceSchema>
+export type RcPassageV1 = z.infer<typeof rcPassageSchema>
+export type RcQuestionItemV1 = z.infer<typeof rcQuestionItemSchema>
+export type AttemptPayload = z.infer<typeof attemptPayloadSchema>
+export type AnsweredPayload = z.infer<typeof answeredPayloadSchema>
+export type StudyNotePayload = z.infer<typeof studyNotePayloadSchema>
+export type RawRecordCorrectedPayload = z.infer<typeof rawRecordCorrectedPayloadSchema>
 
 interface ParseSuccess {
   success: true
