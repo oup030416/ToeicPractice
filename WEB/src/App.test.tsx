@@ -11,6 +11,18 @@ function loadSampleText() {
   return readFileSync(resolve(process.cwd(), '../sync/toeic_web_sync.json'), 'utf-8')
 }
 
+function buildDuplicateEventText() {
+  const sample = JSON.parse(loadSampleText()) as {
+    meta: { event_count: number }
+    events: Array<Record<string, unknown>>
+  }
+
+  sample.meta.event_count += 1
+  sample.events.push({ ...sample.events[0] })
+
+  return JSON.stringify(sample)
+}
+
 describe('App', () => {
   beforeEach(() => {
     window.localStorage.clear()
@@ -61,5 +73,23 @@ describe('App', () => {
     expect(
       screen.getByText(/"workspace_id": "demel-toeic-workspace"/),
     ).toBeInTheDocument()
+  })
+
+  it('shows a blocking alert when restored data has semantic errors', async () => {
+    window.localStorage.setItem(
+      'toeic-web-v1:last-sync-document',
+      JSON.stringify({
+        rawText: buildDuplicateEventText(),
+        fileName: 'toeic_web_sync.json',
+        savedAt: '2026-03-12T12:00:00+09:00',
+      }),
+    )
+
+    render(<App />)
+
+    expect(
+      await screen.findByText('저장된 파일에 차단 오류가 있어 복원하지 않았습니다.'),
+    ).toBeInTheDocument()
+    expect(screen.getAllByText(/event_id가 중복됩니다/)[0]).toBeInTheDocument()
   })
 })

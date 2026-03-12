@@ -1,86 +1,21 @@
 import { z } from 'zod'
 
-import { safePrettyJson, toKoreanList } from './format'
-import type { ToeicLookups, ToeicWebSyncEvent, ToeicWebSyncV1 } from './sync-schema'
-
-const weaknessPayloadSchema = z.object({
-  registry: z.array(
-    z.object({
-      part: z.string(),
-      skill_tag: z.string(),
-      vocab_domain: z.string(),
-      attempt_count: z.number(),
-      wrong_count: z.number(),
-      accuracy: z.number(),
-      repeat_confusion_count: z.number(),
-      latest_exposure: z.union([z.string(), z.null()]),
-      priority_score: z.number(),
-      status: z.string(),
-    }),
-  ),
-})
-
-const recommendationPayloadSchema = z.object({
-  recommendations: z.array(
-    z.object({
-      slot: z.string(),
-      what: z.string(),
-      why: z.string(),
-      evidence: z.string(),
-      strength: z.string(),
-    }),
-  ),
-})
-
-const dashboardPayloadSchema = z.object({
-  project_status: z.string(),
-  recent_session: z.string(),
-  recent_attempt: z.string(),
-  rc_focus: z.array(
-    z.object({
-      part: z.string(),
-      status: z.string(),
-      reason: z.string(),
-      strength: z.string(),
-    }),
-  ),
-  repeated_confusions: z.array(z.unknown()),
-  recent_improvement_signals: z.array(z.unknown()),
-})
-
-const syncAcceptedPayloadSchema = z.object({
-  accepted_revision: z.number(),
-  reason: z.string(),
-})
-
-const attemptPayloadSchema = z.object({
-  material_name: z.string(),
-  source_anchor: z.string(),
-  part: z.string(),
-  skill_tag: z.string(),
-  topic: z.string(),
-  question_count: z.number(),
-  correct_count: z.number(),
-  accuracy: z.number(),
-  time_pressure: z.string(),
-  next_action: z.string(),
-})
-
-const answeredPayloadSchema = z.object({
-  source_set_id: z.string(),
-  source_kind: z.string(),
-  question_no: z.number(),
-  question_type: z.string(),
-  skill_tag: z.string(),
-  vocab_domain: z.string(),
-  document_genre: z.string(),
-  selected_answer: z.string(),
-  correct_answer: z.string(),
-  result: z.string(),
-  error_type: z.string(),
-  time_pressure: z.string(),
-  note: z.string(),
-})
+import { formatPercent, safePrettyJson, toKoreanList } from './format'
+import {
+  attemptPayloadSchema,
+  answeredPayloadSchema,
+  dashboardPayloadSchema,
+  recommendationPayloadSchema,
+  syncAcceptedPayloadSchema,
+  weaknessPayloadSchema,
+  type ToeicLookups,
+  type ToeicWebSyncEvent,
+  type ToeicWebSyncV1,
+} from './sync-schema'
+import {
+  type SyncValidationReport,
+  validateToeicWebSync,
+} from './sync-validation'
 
 export type BadgeTone = 'brand' | 'accent' | 'success' | 'danger' | 'neutral'
 
@@ -176,6 +111,7 @@ export interface DashboardViewModel {
   recentEvents: EventCardView[]
   lastAcceptedRevision: number | null
   lastAcceptedReason: string | null
+  validation: SyncValidationReport
 }
 
 function safeParseKnownPayload<T>(schema: z.ZodType<T>, payload: unknown) {
@@ -216,6 +152,34 @@ function describeUnknown(value: unknown) {
   return safePrettyJson(value)
 }
 
+function formatResultLabel(value: string) {
+  if (value === 'correct') {
+    return '정답'
+  }
+
+  if (value === 'wrong') {
+    return '오답'
+  }
+
+  if (value === 'uncertain') {
+    return '확신 부족'
+  }
+
+  return value
+}
+
+function formatStatusLabel(value: string) {
+  if (value === 'active') {
+    return '활성'
+  }
+
+  if (value === 'watch') {
+    return '관찰'
+  }
+
+  return value
+}
+
 function findLatestEvent(events: ToeicWebSyncEvent[], type: string) {
   return [...events]
     .sort(
@@ -226,24 +190,19 @@ function findLatestEvent(events: ToeicWebSyncEvent[], type: string) {
 }
 
 function buildLookupSections(lookups: ToeicLookups): LookupSection[] {
-  const sections: LookupSection[] = [
+  return [
     { title: '파트', items: lookups.parts },
     ...lookups.parts.map((part) => ({
       title: `${part} 문제 유형`,
       items: lookups.question_types[part] ?? [],
     })),
-    { title: 'skill tags', items: lookups.skill_tags },
-    { title: 'vocab domains', items: lookups.vocab_domains },
-    { title: 'document genres', items: lookups.document_genres },
-    { title: 'error types', items: lookups.error_types },
-    { title: 'review states', items: lookups.review_states },
-    {
-      title: 'recommendation strengths',
-      items: lookups.recommendation_strengths,
-    },
+    { title: '스킬 태그', items: lookups.skill_tags },
+    { title: '어휘 도메인', items: lookups.vocab_domains },
+    { title: '문서 장르', items: lookups.document_genres },
+    { title: '오답 유형', items: lookups.error_types },
+    { title: '복습 상태', items: lookups.review_states },
+    { title: '추천 강도', items: lookups.recommendation_strengths },
   ]
-
-  return sections
 }
 
 function buildLookupSummary(lookups: ToeicLookups) {
@@ -256,15 +215,12 @@ function buildLookupSummary(lookups: ToeicLookups) {
         0,
       ),
     },
-    { key: 'skill tags', count: lookups.skill_tags.length },
-    { key: 'vocab domains', count: lookups.vocab_domains.length },
-    { key: 'document genres', count: lookups.document_genres.length },
-    { key: 'error types', count: lookups.error_types.length },
-    { key: 'review states', count: lookups.review_states.length },
-    {
-      key: 'recommendation strengths',
-      count: lookups.recommendation_strengths.length,
-    },
+    { key: '스킬 태그', count: lookups.skill_tags.length },
+    { key: '어휘 도메인', count: lookups.vocab_domains.length },
+    { key: '문서 장르', count: lookups.document_genres.length },
+    { key: '오답 유형', count: lookups.error_types.length },
+    { key: '복습 상태', count: lookups.review_states.length },
+    { key: '추천 강도', count: lookups.recommendation_strengths.length },
   ]
 }
 
@@ -291,7 +247,7 @@ function eventTone(eventType: string): BadgeTone {
 function buildEventCard(event: ToeicWebSyncEvent): EventCardView {
   let title = event.event_type
   let description = `${event.entity_type} · ${event.entity_id}`
-  let tags = [event.actor]
+  let tags: string[] = [event.actor]
 
   const weaknessPayload = safeParseKnownPayload(weaknessPayloadSchema, event.payload)
   const recommendationPayload = safeParseKnownPayload(
@@ -314,7 +270,7 @@ function buildEventCard(event: ToeicWebSyncEvent): EventCardView {
       (item) => item.status === 'active',
     ).length
     title = 'RC 약점 레지스트리 갱신'
-    description = `${weaknessPayload.registry.length}개 항목 · active ${activeCount}개`
+    description = `${weaknessPayload.registry.length}개 항목 · 활성 ${activeCount}개`
     tags = weaknessPayload.registry.slice(0, 3).map((item) => item.part)
   } else if (recommendationPayload) {
     title = '추천 스냅샷 게시'
@@ -329,14 +285,14 @@ function buildEventCard(event: ToeicWebSyncEvent): EventCardView {
   } else if (syncAcceptedPayload) {
     title = '동기화 승인'
     description = `revision ${syncAcceptedPayload.accepted_revision} · ${syncAcceptedPayload.reason}`
-    tags = ['accepted']
+    tags = ['승인']
   } else if (attemptPayload) {
     title = `${attemptPayload.part} 시도 기록`
-    description = `${attemptPayload.material_name} · ${attemptPayload.accuracy}%`
+    description = `${attemptPayload.material_name} · ${formatPercent(attemptPayload.accuracy)}`
     tags = [attemptPayload.skill_tag, attemptPayload.time_pressure]
   } else if (answeredPayload) {
     title = `문항 응답 기록 ${answeredPayload.question_no}번`
-    description = `${answeredPayload.question_type} · ${answeredPayload.result}`
+    description = `${answeredPayload.question_type} · ${formatResultLabel(answeredPayload.result)}`
     tags = [answeredPayload.skill_tag, answeredPayload.vocab_domain]
   }
 
@@ -393,7 +349,10 @@ function summarizeMaterials(sync: ToeicWebSyncV1) {
   }
 }
 
-export function buildDashboardViewModel(sync: ToeicWebSyncV1): DashboardViewModel {
+export function buildDashboardViewModel(
+  sync: ToeicWebSyncV1,
+  validation: SyncValidationReport = validateToeicWebSync(sync, safePrettyJson(sync)),
+): DashboardViewModel {
   const allEvents = [...sync.events]
     .sort(
       (left, right) =>
@@ -433,7 +392,7 @@ export function buildDashboardViewModel(sync: ToeicWebSyncV1): DashboardViewMode
       accuracy: item.accuracy,
       priorityScore: item.priority_score,
       repeatConfusionCount: item.repeat_confusion_count,
-      status: item.status,
+      status: formatStatusLabel(item.status),
       latestExposure: item.latest_exposure,
     })) ?? []
 
@@ -523,5 +482,6 @@ export function buildDashboardViewModel(sync: ToeicWebSyncV1): DashboardViewMode
     recentEvents: allEvents.slice(0, 6),
     lastAcceptedRevision: latestSyncAcceptedPayload?.accepted_revision ?? null,
     lastAcceptedReason: latestSyncAcceptedPayload?.reason ?? null,
+    validation,
   }
 }

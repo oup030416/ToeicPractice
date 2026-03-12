@@ -69,7 +69,7 @@ export function DetailDrawer({
             ) : null}
           </div>
           <button
-            aria-label="패널 닫기"
+            aria-label="닫기"
             className="rounded-2xl border border-slate-200 bg-slate-50 p-2 text-slate-700 hover:bg-slate-100"
             onClick={onClose}
             type="button"

@@ -38,10 +38,10 @@ export function DetailPanelContent({
           <Badge>{selectedEvent.entityType}</Badge>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <InfoRow label="timestamp" value={formatDateTime(selectedEvent.timestamp)} />
-          <InfoRow label="entity_id" value={selectedEvent.entityId} />
-          <InfoRow label="session_id" value={selectedEvent.sessionId} />
-          <InfoRow label="attempt_id" value={selectedEvent.attemptId} />
+          <InfoRow label="기록 시각" value={formatDateTime(selectedEvent.timestamp)} />
+          <InfoRow label="엔터티 ID" value={selectedEvent.entityId} />
+          <InfoRow label="세션 ID" value={selectedEvent.sessionId} />
+          <InfoRow label="시도 ID" value={selectedEvent.attemptId} />
         </div>
         <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
           <p className="font-medium text-slate-900">{selectedEvent.description}</p>
@@ -61,13 +61,14 @@ export function DetailPanelContent({
           <input
             className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
             onChange={(event) => onEventQueryChange(event.target.value)}
-            placeholder="event_type, entity_id, payload 텍스트 검색"
+            placeholder="이벤트 유형, 엔터티 ID, payload 텍스트 검색"
             type="search"
             value={eventQuery}
           />
         </label>
         <p className="text-sm leading-6 text-slate-500">
-          검색은 `useDeferredValue`로 지연 반영됩니다. 현재 {formatNumber(filteredEvents.length)}개 이벤트 표시 중입니다.
+          검색 결과를 부드럽게 반영하도록 입력을 지연 처리합니다. 현재{' '}
+          {formatNumber(filteredEvents.length)}개 이벤트를 표시 중입니다.
         </p>
         <div className="space-y-3">
           {filteredEvents.map((event) => (
@@ -128,12 +129,12 @@ export function DetailPanelContent({
         <MaterialSection
           cards={viewModel.materialsSummary.officialCards}
           emptyText="공식 세트가 아직 비어 있습니다."
-          title="Official Sets"
+          title="공식 세트"
         />
         <MaterialSection
           cards={viewModel.materialsSummary.drillCards}
           emptyText="드릴 세트가 아직 비어 있습니다."
-          title="Drill Sets"
+          title="드릴 세트"
         />
       </div>
     )
@@ -153,7 +154,7 @@ export function DetailPanelContent({
         <Badge tone="accent">준비 중</Badge>
         <p className="font-medium">RC 문제 풀기 상세 UI는 아직 구현하지 않았습니다.</p>
         <p className="text-sm leading-6 text-slate-700">
-          이번 v1에서는 진입 버튼과 placeholder 패널만 제공합니다. 이후 Part 5/6/7
+          이번 v1에서는 진입 버튼과 준비 중 패널만 제공합니다. 이후 Part 5/6/7
           문항 표시, 응답 입력, 타이머, 정답 대조, 이벤트 기록 작성 계층을 이 패널
           기준으로 확장합니다.
         </p>

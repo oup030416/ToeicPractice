@@ -15,11 +15,11 @@ export function buildPanelTitle(
   }
 
   if (panel?.type === 'lookups') {
-    return 'Taxonomy / Lookups'
+    return '전체 분류표'
   }
 
   if (panel?.type === 'materials') {
-    return 'Materials 상세'
+    return '자료 상세'
   }
 
   if (panel?.type === 'raw') {
@@ -43,7 +43,7 @@ export function buildPanelSubtitle(
   }
 
   if (panel.type === 'events') {
-    return `총 ${formatNumber(loadedDocument.syncData.events.length)}개 중 ${formatNumber(filteredEventsCount)}개 표시`
+    return `총 ${formatNumber(loadedDocument.syncData.events.length)}개 중 ${formatNumber(filteredEventsCount)}개를 표시합니다.`
   }
 
   if (panel.type === 'raw') {
@@ -51,7 +51,7 @@ export function buildPanelSubtitle(
   }
 
   if (panel.type === 'lookups') {
-    return 'lookups 블록의 전체 taxonomy를 노출합니다.'
+    return 'lookups 블록의 전체 분류표를 노출합니다.'
   }
 
   if (panel.type === 'materials') {
@@ -59,7 +59,7 @@ export function buildPanelSubtitle(
   }
 
   if (panel.type === 'placeholder') {
-    return '버튼만 연결된 준비 중 패널'
+    return '버튼만 연결된 준비 중 패널입니다.'
   }
 
   return undefined
