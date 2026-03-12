@@ -186,7 +186,7 @@ export interface DashboardViewModel {
   practiceHistory: PracticeRecordView[]
 }
 
-interface FlattenedPracticeItem extends PracticeQuestionView {}
+type FlattenedPracticeItem = PracticeQuestionView
 
 function safeParseKnownPayload<T>(schema: z.ZodType<T>, payload: unknown) {
   const parsed = schema.safeParse(payload)
