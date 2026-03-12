@@ -123,9 +123,9 @@ describe('RC practice flow', () => {
     await user.click(screen.getAllByRole('button', { name: '문제 풀이 시작' })[1])
     expect(await screen.findByText('Choose the best answer for question 1.')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: /A Option A1/ }))
+    await user.click(screen.getByRole('button', { name: /AOption A1/ }))
     await user.click(screen.getByRole('button', { name: '다음' }))
-    await user.click(screen.getByRole('button', { name: /A Option A2/ }))
+    await user.click(screen.getByRole('button', { name: /AOption A2/ }))
     await user.click(screen.getByRole('button', { name: '종료' }))
     await user.click(screen.getAllByRole('button', { name: '종료' })[1])
 
