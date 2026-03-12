@@ -24,6 +24,7 @@ import { Badge } from './components/Badge'
 import { DashboardSections, EmptyDashboardState } from './components/DashboardSections'
 import { DetailDrawer } from './components/DetailDrawer'
 import { DetailPanelContent } from './components/DetailPanelContent'
+import { PracticeWorkspace } from './components/PracticeWorkspace'
 import { ToastStack, type ToastItem } from './components/ToastStack'
 import { downloadTextFile } from './lib/download'
 import {
@@ -54,7 +55,6 @@ export type DetailPanelState =
   | { type: 'materials' }
   | { type: 'raw' }
   | { type: 'events' }
-  | { type: 'placeholder' }
   | null
 
 interface AlertState {
@@ -162,6 +162,7 @@ export default function App({
   )
   const [loadAlert, setLoadAlert] = useState<AlertState | null>(null)
   const [panel, setPanel] = useState<DetailPanelState>(null)
+  const [showPracticeWorkspace, setShowPracticeWorkspace] = useState(false)
   const [eventQuery, setEventQuery] = useState('')
   const [toasts, setToasts] = useState<ToastItem[]>([])
   const [isPending, startDashboardTransition] = useTransition()
@@ -199,6 +200,11 @@ export default function App({
         event.searchableText.includes(deferredEventQuery.trim().toLowerCase()),
       )
     : []
+  const canOpenPractice =
+    !showPracticeWorkspace &&
+    editorState.currentParsed !== null &&
+    editorState.blockingIssues.length === 0 &&
+    loadedDocument !== null
 
   function dismissToast(id: number) {
     setToasts((current) => current.filter((toast) => toast.id !== id))
@@ -232,6 +238,7 @@ export default function App({
         source,
       })
       setPanel(null)
+      setShowPracticeWorkspace(false)
       setEventQuery('')
       setLoadAlert(null)
     })
@@ -672,7 +679,22 @@ export default function App({
                       'border-white/16 bg-white/6 disabled:cursor-not-allowed disabled:opacity-50',
                     )}
                     disabled={!hasDraft}
-                    onClick={() => setPanel({ type: 'placeholder' })}
+                    onClick={() => {
+                      if (!canOpenPractice) {
+                        pushToast({
+                          title: 'RC 문제 풀이를 열 수 없습니다.',
+                          description:
+                            hasDraft && editorState.blockingIssues.length > 0
+                              ? '차단 오류를 먼저 해결해야 합니다.'
+                              : '유효한 JSON 드래프트를 먼저 불러와야 합니다.',
+                          tone: 'danger',
+                        })
+                        return
+                      }
+
+                      setPanel(null)
+                      setShowPracticeWorkspace(true)
+                    }}
                     type="button"
                   >
                     <BookOpen className="size-4" />
@@ -752,7 +774,20 @@ export default function App({
             </section>
           ) : null}
 
-          {viewModel ? (
+          {showPracticeWorkspace && loadedDocument ? (
+            <PracticeWorkspace
+              onClose={() => setShowPracticeWorkspace(false)}
+              onCommitSync={(nextSync, options) =>
+                commitDraftChange(nextSync, {
+                  title: options.title,
+                  description: options.description,
+                })
+              }
+              onNotify={pushToast}
+              syncData={loadedDocument.syncData}
+              viewModel={loadedDocument.viewModel}
+            />
+          ) : viewModel ? (
             <DashboardSections
               loadedDocument={loadedDocument as LoadedDocument}
               onOpenEvent={(eventId) => setPanel({ type: 'event', eventId })}
@@ -775,7 +810,7 @@ export default function App({
 
       <DetailDrawer
         onClose={() => setPanel(null)}
-        open={panel !== null}
+        open={panel !== null && !showPracticeWorkspace}
         subtitle={buildPanelSubtitle(panel, loadedDocument, filteredEvents.length)}
         title={buildPanelTitle(panel, selectedEvent)}
       >
