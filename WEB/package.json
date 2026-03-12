@@ -9,9 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "autocommit:register": "powershell -NoProfile -ExecutionPolicy Bypass -File ./tools/register-auto-commit-task.ps1",
-    "autocommit:unregister": "powershell -NoProfile -ExecutionPolicy Bypass -File ./tools/unregister-auto-commit-task.ps1"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
