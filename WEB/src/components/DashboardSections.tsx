@@ -63,6 +63,7 @@ export function DashboardSections({
   onOpenEvents,
   onOpenLookups,
   onOpenMaterials,
+  onOpenMeta,
   onOpenRaw,
 }: {
   loadedDocument: LoadedDocument
@@ -70,6 +71,7 @@ export function DashboardSections({
   onOpenEvents: () => void
   onOpenLookups: () => void
   onOpenMaterials: () => void
+  onOpenMeta: () => void
   onOpenRaw: () => void
 }) {
   const viewModel = loadedDocument.viewModel
@@ -79,6 +81,15 @@ export function DashboardSections({
     <div className="space-y-6">
       <div className="grid gap-6 xl:grid-cols-[1.35fr_1fr]">
         <SectionCard
+          action={
+            <button
+              className="rounded-2xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:border-blue-300 hover:text-blue-800"
+              onClick={onOpenMeta}
+              type="button"
+            >
+              meta 편집
+            </button>
+          }
           subtitle="업로드, localStorage 복원, 리비전, 이벤트 수를 한눈에 확인합니다."
           title="로드 상태"
         >
@@ -430,21 +441,31 @@ export function DashboardSections({
   )
 }
 
-export function EmptyDashboardState() {
+export function EmptyDashboardState({
+  hasDraft = false,
+  message,
+}: {
+  hasDraft?: boolean
+  message?: string
+}) {
   return (
     <SectionCard
-      subtitle="현재 프로젝트의 `sync/toeic_web_sync.json`을 업로드하거나, 이전 브라우저 저장본이 있으면 자동 복원됩니다."
-      title="JSON 업로드로 시작"
+      subtitle={
+        hasDraft
+          ? '현재 드래프트를 바로 편집할 수 있지만, 구조 오류 때문에 요약 대시보드는 잠시 비활성 상태입니다.'
+          : '현재 프로젝트의 `sync/toeic_web_sync.json`을 업로드하거나, 이전 브라우저 저장본이 있으면 자동 복원됩니다.'
+      }
+      title={hasDraft ? '드래프트 편집으로 복구' : 'JSON 업로드로 시작'}
     >
       <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-[28px] border border-dashed border-blue-200 bg-blue-50/60 p-5">
           <p className="font-medium text-slate-900">
-            이 대시보드는 업로드된 교환 파일만 읽습니다.
+            {message ?? '이 대시보드는 업로드된 교환 파일만 읽습니다.'}
           </p>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
             <li>meta, lookups, materials, events 네 블록을 검증합니다.</li>
             <li>권장 입력 파일: `sync/toeic_web_sync.json`</li>
-            <li>불러온 데이터는 브라우저 localStorage에 최근 1개만 저장합니다.</li>
+            <li>불러온 데이터는 브라우저 localStorage에 최근 1개 드래프트만 저장합니다.</li>
           </ul>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
