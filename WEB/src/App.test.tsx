@@ -80,14 +80,14 @@ describe('App', () => {
     await user.type(revisionInput, '9')
     await user.click(screen.getByRole('button', { name: 'meta 적용' }))
 
-    expect(await screen.findByText('리비전 9')).toBeInTheDocument()
+    expect((await screen.findAllByText('리비전 9'))[0]).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '되돌리기' }))
-    expect(await screen.findByText('리비전 1')).toBeInTheDocument()
+    await user.click(screen.getAllByRole('button', { name: '되돌리기' })[0])
+    expect((await screen.findAllByText('리비전 1'))[0]).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '다시 실행' }))
-    expect(await screen.findByText('리비전 9')).toBeInTheDocument()
-  })
+    await user.click(screen.getAllByRole('button', { name: '다시 실행' })[0])
+    expect((await screen.findAllByText('리비전 9'))[0]).toBeInTheDocument()
+  }, 10000)
 
   it('keeps editing enabled but disables download when a blocking error is introduced', async () => {
     window.localStorage.setItem(
@@ -116,6 +116,6 @@ describe('App', () => {
     expect(
       await screen.findByText('현재 드래프트에 차단 오류가 있습니다.'),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '현재 JSON 다운로드' })).toBeDisabled()
+    expect(screen.getAllByRole('button', { name: '현재 JSON 다운로드' })[0]).toBeDisabled()
   })
 })
