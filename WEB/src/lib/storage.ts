@@ -1,4 +1,4 @@
-export interface StoredSyncDocument {
+export interface StoredDraftDocument {
   rawText: string
   fileName: string | null
   savedAt: string
@@ -6,7 +6,7 @@ export interface StoredSyncDocument {
 
 const STORAGE_KEY = 'toeic-web-v1:last-sync-document'
 
-export function loadStoredSyncDocument(): StoredSyncDocument | null {
+export function loadStoredDraftDocument(): StoredDraftDocument | null {
   if (typeof window === 'undefined') {
     return null
   }
@@ -18,7 +18,7 @@ export function loadStoredSyncDocument(): StoredSyncDocument | null {
       return null
     }
 
-    const parsed = JSON.parse(stored) as Partial<StoredSyncDocument>
+    const parsed = JSON.parse(stored) as Partial<StoredDraftDocument>
 
     if (typeof parsed.rawText !== 'string') {
       return null
@@ -44,3 +44,14 @@ export function saveStoredSyncDocument(document: StoredSyncDocument) {
 
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document))
 }
+
+export function saveStoredDraftDocument(document: StoredDraftDocument) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document))
+}
+
+export const loadStoredSyncDocument = loadStoredDraftDocument
+export const saveStoredSyncDocument = saveStoredDraftDocument
