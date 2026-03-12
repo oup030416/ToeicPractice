@@ -1,0 +1,268 @@
+{
+  "meta": {
+    "workspace_id": "demel-toeic-workspace",
+    "schema_version": "toeic-web-sync/v1",
+    "scope": "rc",
+    "revision": 1,
+    "previous_revision": 0,
+    "exported_at": "2026-03-12T12:00:00+09:00",
+    "exported_by": "codex",
+    "event_count": 4,
+    "materials_revision": 1
+  },
+  "lookups": {
+    "parts": [
+      "Part 5",
+      "Part 6",
+      "Part 7"
+    ],
+    "question_types": {
+      "Part 5": [
+        "parts of speech",
+        "verb form",
+        "tense",
+        "subject-verb agreement",
+        "voice",
+        "infinitive / gerund / participle",
+        "relative clause",
+        "preposition",
+        "conjunction",
+        "vocabulary choice",
+        "collocation"
+      ],
+      "Part 6": [
+        "context completion",
+        "sentence insertion",
+        "coherence cue",
+        "referent tracking",
+        "logical connection",
+        "vocabulary consistency"
+      ],
+      "Part 7": [
+        "specific info",
+        "purpose",
+        "inference",
+        "connect info",
+        "paraphrase",
+        "NOT / EXCEPT",
+        "multi-document link",
+        "visual info integration"
+      ]
+    },
+    "skill_tags": [
+      "grammar reaction",
+      "vocabulary discrimination",
+      "context completion",
+      "sentence insertion",
+      "coherence cue",
+      "evidence location",
+      "paraphrase tracking",
+      "connect info",
+      "inference extraction",
+      "multi-document link"
+    ],
+    "vocab_domains": [
+      "contracts",
+      "negotiations",
+      "marketing",
+      "sales",
+      "warranties",
+      "offices",
+      "personnel",
+      "purchasing",
+      "travel",
+      "finance",
+      "business planning",
+      "conferences",
+      "housing",
+      "dining out",
+      "entertainment",
+      "health",
+      "corporate development",
+      "general business"
+    ],
+    "document_genres": [
+      "email",
+      "letter",
+      "notice",
+      "advertisement",
+      "article",
+      "form",
+      "online chat",
+      "text message chain",
+      "schedule",
+      "report",
+      "instruction",
+      "information page",
+      "memo"
+    ],
+    "error_types": [
+      "grammar",
+      "vocabulary",
+      "paraphrase",
+      "connect-info",
+      "inference",
+      "evidence-location",
+      "time-pressure",
+      "mixed"
+    ],
+    "review_states": [
+      "new",
+      "reviewed",
+      "repeated",
+      "stabilized"
+    ],
+    "recommendation_strengths": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ]
+  },
+  "materials": {
+    "official_sets": [],
+    "drill_sets": []
+  },
+  "events": [
+    {
+      "event_id": "codex-20260312-0001",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "rc_weakness.recomputed",
+      "entity_type": "rc_weakness_registry",
+      "entity_id": "baseline-rc-weaknesses",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "registry": [
+          {
+            "part": "Part 5",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 68,
+            "status": "active"
+          },
+          {
+            "part": "Part 6",
+            "skill_tag": "context completion",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 55,
+            "status": "watch"
+          },
+          {
+            "part": "Part 7",
+            "skill_tag": "paraphrase tracking",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 70,
+            "status": "active"
+          }
+        ]
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0002",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "recommendation.published",
+      "entity_type": "recommendation_snapshot",
+      "entity_id": "baseline-rc-recommendation",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "recommendations": [
+          {
+            "slot": "지금 가장 먼저 보강할 RC 항목",
+            "what": "Part 5 품사/동사 반응 추적 시작",
+            "why": "문항 단위 기록이 아직 없어 초기 병목부터 우선 추적해야 함",
+            "evidence": "RC 시작 프로필",
+            "strength": "high"
+          },
+          {
+            "slot": "다음 세션에서 다시 볼 RC 항목",
+            "what": "Part 7 근거 위치와 패러프레이즈 질문 묶음 정리",
+            "why": "반복 혼동 개념이 쌓일 때 가장 직접적으로 추천 품질이 올라감",
+            "evidence": "RC 시작 프로필",
+            "strength": "high"
+          },
+          {
+            "slot": "당장 보류할 RC 항목",
+            "what": "Part 6 sentence insertion 집중 생성",
+            "why": "우선 문항 기록과 약점 분류가 먼저 필요함",
+            "evidence": "기록 부족",
+            "strength": "medium"
+          }
+        ]
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0003",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "dashboard.published",
+      "entity_type": "progress_dashboard",
+      "entity_id": "baseline-dashboard",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "project_status": "적응형 추적 활성",
+        "recent_session": "없음",
+        "recent_attempt": "없음",
+        "rc_focus": [
+          {
+            "part": "Part 5",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 문법 반응 병목",
+            "strength": "high"
+          },
+          {
+            "part": "Part 6",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 문맥 연결 병목",
+            "strength": "medium"
+          },
+          {
+            "part": "Part 7",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 패러프레이즈·근거 위치 병목",
+            "strength": "high"
+          }
+        ],
+        "repeated_confusions": [],
+        "recent_improvement_signals": []
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0004",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "sync.accepted",
+      "entity_type": "sync_revision",
+      "entity_id": "revision-1",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "accepted_revision": 1,
+        "reason": "초기 RC 웹 연동 기준 파일 생성"
+      },
+      "supersedes_event_id": null
+    }
+  ]
+}

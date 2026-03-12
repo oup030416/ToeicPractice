@@ -1,0 +1,115 @@
+# TOEIC 학습 워크스페이스 규칙
+
+## 범위
+이 워크스페이스는 한 명의 학습자가 TOEIC Listening and Reading 학습 과정에서 생긴 자료 사용 기록, 시도 결과, 반복 약점, Q&A 개념, 추천 근거를 저장하고 관리하는 용도로만 사용한다.
+
+이 폴더 안의 모든 작업은 `docs/00_project_charter.md`, `docs/01_verified_sources.md`, `docs/03_study_system.md`, `docs/04_adaptive_recommendation_model.md`를 기준으로 수행한다.
+
+## 고정 학습자 프로필
+- 시작 추정치: LC 200-300대 성향, RC 150-250대 성향
+- 핵심 약점:
+  - LC: 간접응답, 패러프레이즈, 긴 지문 중간 정보
+  - RC: 패러프레이즈, 문장 연결, 복합 문법
+- 실제 공부 시간은 선택 메타데이터일 뿐, 강제 목표로 쓰지 않는다.
+
+## 언어 규칙
+1. 내부 판단, 설계 기준, 분류 체계, 구현 논리는 영어 기준으로 생각하고 정리해도 된다.
+2. 사용자에게 보이는 모든 문서, 안내, 템플릿, 로그, 요약, 진행 기록은 한국어로 작성한다.
+3. 예외는 아래와 같다.
+   - 실제 TOEIC 문제
+   - 영어 예문
+   - 어휘와 표현 묶음
+   - 원문 인용
+   - 파트명, 고유명사, URL, 파일명
+4. 새로 만드는 사용자 노출 파일은 기본적으로 한국어 문장으로 작성한다.
+
+## Skill 사용 규칙
+1. 이 워크스페이스 작업이 아래 역할과 맞으면 해당 Skill을 우선 사용한다.
+   - `codex-evidence-gate`: 새 제안, 자료 정책 변경, 공식 사실 검증, 추천 규칙 변경
+   - `toeic-study-orchestrator`: 세션 시작, 시도 반영, 최근 기록 기반 추천, 대시보드 갱신
+   - `toeic-template-workbench`: 템플릿 생성, 양식 압축, 사용자용 카드 구조 통일
+   - `toeic-review-auditor`: 드릴, 템플릿, 전략, 합성 콘텐츠 검수
+   - `toeic-drill-generator`: 공식 자료 기반 제한 드릴 생성
+   - `toeic-qa-memory-desk`: 빠른 질의응답, 질문 저장, 개념 카드 승격, 복습 큐 및 추천 반영
+2. TOEIC 전용 Skill은 현재 워크스페이스 전용으로 사용한다.
+3. 새 기술이나 새 워크플로를 활성 규칙으로 편입하기 전에는 `codex-evidence-gate`를 먼저 거친다.
+4. 드릴 생성 결과는 최종 전달 전에 `toeic-review-auditor` 기준으로 검수한다.
+5. Q&A 스레드에서 나온 질문은 답변만 하고 끝내지 말고, `tracking/qna_master_log.md`와 관련 메모리 문서에 반드시 반영한다.
+
+## 절대 규칙
+1. 공식 자료 우선. 시험 형식, 점수 해석, 자료 현황, 전략, 문항 출처와 관련된 내용을 다룰 때는 시간에 따라 바뀔 수 있는지 먼저 판단하고, 바뀔 수 있다면 공식 자료로 확인한 뒤 반영한다.
+2. 출처 우선순위는 고정한다.
+   - ETS 공식 TOEIC 자료와 정책
+   - 한국TOEIC위원회 공식 공개문항 페이지와 공식 유튜브 자료
+   - 사용자가 직접 확보한 공식 PDF 또는 그 기반 노트
+   - 공식 자료가 부족할 때만 `supplemental`로 명시한 보조 자료
+3. 문서 안에서는 아래 세 범주를 분리해 다룬다.
+   - 공식 사실
+   - 코칭 해석
+   - 작업 가정
+4. 임의 점수 환산표, 보장식 점수 상승 문구, 근거 없는 예상 점수는 쓰지 않는다.
+5. 추천은 기록 근거를 바탕으로 바꾸되, 공식 사실 해석과 자료 정책은 사용자 승인 없이 바꾸지 않는다.
+
+## 출처 확인 및 기록 절차
+1. 변동 가능성이 있는 사실이나 정확한 표현이 중요한 내용은 공식 자료로 먼저 확인한다.
+2. 새로 확인한 내용은 `tracking/source_check_log.md`에 기록한다.
+3. 사실이 들어간 문서는 직접 링크를 달거나 `docs/01_verified_sources.md`를 참조시킨다.
+4. ETS 점수 설명 자료를 해석한 내용은 반드시 코칭 해석으로 표시한다.
+
+## 저작권 및 자료 취급 규칙
+1. 사용자가 직접 제공하지 않은 한, 보호되는 TOEIC 문제 전체, 스크립트 전체, 대량 정답표는 로컬 문서에 붙여 넣지 않는다.
+2. 전체 문항 복사 대신 문항 번호, 파트, 페이지, 타임스탬프, 짧은 요약을 우선 사용한다.
+3. 한국TOEIC위원회 공개문항을 사용할 때는 ETS 저작권 고지를 존중하고, 무단 복제 형식의 문서화를 피한다.
+4. 보호 자료를 복사하기보다 공식 페이지 링크를 남긴다.
+5. 예외적으로 `sync/toeic_web_sync.json` 안에는 사용자가 개인 학습용 웹사이트에서 직접 쓰기 위해 선택한 RC 공식 문항 원문 전체를 저장할 수 있다.
+6. 이 예외는 RC 웹 연동용 단일 교환 파일에만 적용한다. 내부 Markdown 문서에는 계속 전체 복제를 피하고 요약, 앵커, 메타데이터 중심으로 남긴다.
+7. 웹사이트에서 공식 문항 원문은 읽기 전용으로 취급한다.
+
+## 기록 운영 규칙
+1. 세션은 한 번의 공부 흐름 전체를 뜻한다.
+2. 시도는 특정 자료, 세트, 파트, 문항군을 실제로 푼 기록을 뜻한다.
+3. 시도 기록이 있으면 세션 기록보다 먼저 남긴다.
+4. 추천은 시도 결과, Q&A 질문 누적, 반복 혼동 개념, 시간 압박 여부를 함께 반영한다.
+5. 실제 공부 시간은 선택 기록으로만 남기고 강제 목표나 진척도 기준으로 쓰지 않는다.
+
+## 웹 연동 규칙
+1. 웹사이트와 현재 프로젝트는 분리된 시스템으로 취급한다.
+2. 웹사이트와 직접 주고받는 파일은 `sync/toeic_web_sync.json` 하나뿐이다.
+3. 이 파일은 UTF-8 JSON, append-only 이벤트 로그형으로 유지한다.
+4. 웹사이트는 `session.recorded`, `attempt.recorded`, `study_note.recorded`, `rc_item.answered`, `drill_item.answered`, `raw_record.corrected` 같은 원시 이벤트만 직접 쓴다.
+5. Codex는 `qna.linked`, `concept.promoted`, `review.enqueued`, `rc_weakness.recomputed`, `recommendation.published`, `dashboard.published`, `drill_set.published`, `sync.accepted` 같은 파생 이벤트만 쓴다.
+6. 웹 연동 v1은 RC 전용이다. `Part 5`, `Part 6`, `Part 7` 이외의 파트와 LC 전용 이벤트는 허용하지 않는다.
+7. 웹에서 들어온 변경은 먼저 `sync/toeic_web_sync.json`에서 검증한 뒤, 내부 Markdown 원장에 반영한다.
+8. 현재 프로젝트 문서는 계속 장기 기록의 소스 오브 트루스이고, `sync/toeic_web_sync.json`은 교환용 단일 아티팩트다.
+9. 현재 프로젝트 규모에서는 `오류는 차단, 경고는 허용` 정책을 쓴다.
+10. 차단 대상은 구조 오류, scope/schema 불일치, 중복 event_id, 잘못된 ownership, 존재하지 않는 참조, lookup 바깥 분류값이다.
+11. 경고 대상은 event_count 불일치, 알 수 없는 미래 이벤트, stale revision, 파생 이벤트 갱신 지연, soft limit 초과다.
+12. 현재는 해시, 압축, multi-file sync, 자동 compaction, 병합 엔진, 추가 백업 파일 운영을 도입하지 않는다.
+
+## 파일 업데이트 순서
+학습 기록을 반영할 때는 아래 순서로 갱신한다.
+1. 해당 `logs/attempts/` 기록
+2. 해당 `logs/sessions/` 기록
+3. `tracking/progress_dashboard.md`
+4. 새 사실을 확인했다면 `tracking/source_check_log.md`
+5. 전략 또는 규칙 변경이 있었다면 `tracking/strategy_change_log.md`
+6. 웹사이트와 다시 교환해야 하면 마지막에 `sync/toeic_web_sync.json`을 갱신한다.
+
+## Q&A 메모리 반영 규칙
+1. Q&A 스레드는 별도 스레드로 운용하되, 메모리는 이 프로젝트 폴더 문서가 담당한다.
+2. 모든 질문은 `tracking/qna_master_log.md`에 append-only로 남긴다.
+3. 반복 가치가 있는 개념은 `knowledge/concept_index.md`와 `knowledge/concepts/` 아래 카드로 승격한다.
+4. 저위험 반영 항목은 `tracking/review_queue.md`에 자동 기록한다.
+5. 추천 규칙이나 자료 정책에 영향을 주는 항목은 `tracking/strategy_change_log.md`에 남긴다.
+6. 아래 항목은 자동반영하지 않고 승인 대기로만 남긴다.
+   - 공식 사실 해석 변경
+   - 새 자료 도입
+   - 새 자동화 또는 새 Skill 도입
+   - 추천 산식 변경
+   - 평가 지표 변경
+
+## 작업 품질 기준
+- 기록은 짧고 차갑고 실행 가능해야 한다
+- 근거 없는 격려보다 증거를 우선한다
+- 일반 ESL 문장보다 TOEIC형 직장 영어를 우선한다
+- 다음 추천은 반드시 기록 근거와 연결되어야 한다
