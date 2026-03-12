@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { deleteValueAtPath, getValueAtPath, setValueAtPath } from '../lib/editor-state'
 import { EmptyMessage } from './DashboardBlocks'
@@ -52,21 +52,59 @@ export function LookupsEditor({
   const selectedSection = sections.find((section) => section.key === sectionKey) ?? sections[0]
   const selectedValue = getValueAtPath(draft, [...selectedSection.path])
 
+  return (
+    <EditorSection
+      description="개별 항목 수정/삭제 후 적용하거나, 섹션 전체를 삭제할 수 있습니다."
+      title="lookups 편집"
+    >
+      <div className="flex flex-wrap gap-2">
+        {sections.map((section) => (
+          <button
+            className={`rounded-2xl border px-3 py-2 text-sm font-medium ${
+              section.key === sectionKey
+                ? 'border-blue-200 bg-blue-50 text-blue-800'
+                : 'border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:text-blue-800'
+            }`}
+            key={section.key}
+            onClick={() => setSectionKey(section.key)}
+            type="button"
+          >
+            {section.title}
+          </button>
+        ))}
+      </div>
+      <LookupsSectionEditor
+        draft={draft}
+        key={`${sectionKey}-${JSON.stringify(selectedValue)}`}
+        onCommitDraftChange={onCommitDraftChange}
+        selectedSection={selectedSection}
+        selectedValue={selectedValue}
+      />
+    </EditorSection>
+  )
+}
+
+function LookupsSectionEditor({
+  draft,
+  selectedSection,
+  selectedValue,
+  onCommitDraftChange,
+}: {
+  draft: unknown
+  selectedSection: {
+    key: string
+    title: string
+    path: readonly ['lookups', string]
+  }
+  selectedValue: unknown
+  onCommitDraftChange: (nextPresent: unknown, message: CommitMessage) => void
+}) {
   const [listDraft, setListDraft] = useState<string[]>(asArray(selectedValue).map(readString))
   const [questionTypeDraft, setQuestionTypeDraft] = useState<Record<string, string[]>>({
     'Part 5': asArray(asRecord(selectedValue)['Part 5']).map(readString),
     'Part 6': asArray(asRecord(selectedValue)['Part 6']).map(readString),
     'Part 7': asArray(asRecord(selectedValue)['Part 7']).map(readString),
   })
-
-  useEffect(() => {
-    setListDraft(asArray(selectedValue).map(readString))
-    setQuestionTypeDraft({
-      'Part 5': asArray(asRecord(selectedValue)['Part 5']).map(readString),
-      'Part 6': asArray(asRecord(selectedValue)['Part 6']).map(readString),
-      'Part 7': asArray(asRecord(selectedValue)['Part 7']).map(readString),
-    })
-  }, [sectionKey, JSON.stringify(selectedValue)])
 
   function applyCurrentSection() {
     if (selectedSection.key === 'question_types') {
@@ -98,27 +136,7 @@ export function LookupsEditor({
   }
 
   return (
-    <EditorSection
-      description="개별 항목 수정/삭제 후 적용하거나, 섹션 전체를 삭제할 수 있습니다."
-      title="lookups 편집"
-    >
-      <div className="flex flex-wrap gap-2">
-        {sections.map((section) => (
-          <button
-            className={`rounded-2xl border px-3 py-2 text-sm font-medium ${
-              section.key === sectionKey
-                ? 'border-blue-200 bg-blue-50 text-blue-800'
-                : 'border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:text-blue-800'
-            }`}
-            key={section.key}
-            onClick={() => setSectionKey(section.key)}
-            type="button"
-          >
-            {section.title}
-          </button>
-        ))}
-      </div>
-
+    <>
       {selectedSection.key === 'question_types' ? (
         <div className="space-y-4">
           {(['Part 5', 'Part 6', 'Part 7'] as const).map((part) => (
@@ -202,6 +220,6 @@ export function LookupsEditor({
         onPrimary={applyCurrentSection}
         primaryLabel="선택 섹션 적용"
       />
-    </EditorSection>
+    </>
   )
 }

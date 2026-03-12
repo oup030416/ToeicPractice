@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { deleteValueAtPath, getValueAtPath, setValueAtPath } from '../lib/editor-state'
 import { EmptyMessage } from './DashboardBlocks'
@@ -6,7 +6,10 @@ import type { CommitMessage } from './detail-editor-types'
 import { asArray, asRecord, parseJsonInput, readString } from './editor-utils'
 import { EditorSection, Field, JsonArea, SectionActionRow } from './editor-shared'
 
-function buildKnownPayloadDraft(eventType: string, payload: Record<string, unknown>) {
+function buildKnownPayloadDraft(
+  eventType: string,
+  payload: Record<string, unknown>,
+): PayloadDraftState {
   if (eventType === 'attempt.recorded') {
     return {
       kind: 'attempt' as const,
@@ -100,6 +103,11 @@ function buildKnownPayloadDraft(eventType: string, payload: Record<string, unkno
   }
 }
 
+interface PayloadDraftState {
+  kind: string
+  fields: Record<string, string>
+}
+
 export function EventEditor({
   draft,
   eventId,
@@ -118,7 +126,30 @@ export function EventEditor({
     return <EmptyMessage text="현재 드래프트에서 해당 이벤트를 찾지 못했습니다." />
   }
 
-  const eventRecord = asRecord(events[eventIndex])
+  return (
+    <EventEditorForm
+      draft={draft}
+      eventId={eventId}
+      eventIndex={eventIndex}
+      eventRecord={asRecord(events[eventIndex])}
+      onCommitDraftChange={onCommitDraftChange}
+    />
+  )
+}
+
+function EventEditorForm({
+  draft,
+  eventId,
+  eventIndex,
+  eventRecord,
+  onCommitDraftChange,
+}: {
+  draft: unknown
+  eventId: string
+  eventIndex: number
+  eventRecord: Record<string, unknown>
+  onCommitDraftChange: (nextPresent: unknown, message: CommitMessage) => void
+}) {
   const [eventForm, setEventForm] = useState({
     event_id: readString(eventRecord.event_id),
     timestamp: readString(eventRecord.timestamp),
@@ -130,28 +161,10 @@ export function EventEditor({
     attempt_id: readString(eventRecord.attempt_id),
     supersedes_event_id: readString(eventRecord.supersedes_event_id),
   })
-  const [payloadDraft, setPayloadDraft] = useState(
+  const [payloadDraft, setPayloadDraft] = useState<PayloadDraftState>(
     buildKnownPayloadDraft(readString(eventRecord.event_type), asRecord(eventRecord.payload)),
   )
   const [payloadError, setPayloadError] = useState<string | null>(null)
-
-  useEffect(() => {
-    setEventForm({
-      event_id: readString(eventRecord.event_id),
-      timestamp: readString(eventRecord.timestamp),
-      actor: readString(eventRecord.actor),
-      event_type: readString(eventRecord.event_type),
-      entity_type: readString(eventRecord.entity_type),
-      entity_id: readString(eventRecord.entity_id),
-      session_id: readString(eventRecord.session_id),
-      attempt_id: readString(eventRecord.attempt_id),
-      supersedes_event_id: readString(eventRecord.supersedes_event_id),
-    })
-    setPayloadDraft(
-      buildKnownPayloadDraft(readString(eventRecord.event_type), asRecord(eventRecord.payload)),
-    )
-    setPayloadError(null)
-  }, [JSON.stringify(eventRecord)])
 
   function handleApply() {
     let nextEvent: unknown = eventRecord

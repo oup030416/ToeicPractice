@@ -37,14 +37,6 @@ export function loadStoredDraftDocument(): StoredDraftDocument | null {
   }
 }
 
-export function saveStoredSyncDocument(document: StoredSyncDocument) {
-  if (typeof window === 'undefined') {
-    return
-  }
-
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document))
-}
-
 export function saveStoredDraftDocument(document: StoredDraftDocument) {
   if (typeof window === 'undefined') {
     return

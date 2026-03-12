@@ -44,7 +44,7 @@ export interface LoadedDocument {
   fileName: string | null
   savedAt: string
   source: 'upload' | 'restore'
-  viewModel: EditableDocumentState['viewModel']
+  viewModel: NonNullable<EditableDocumentState['viewModel']>
 }
 
 export type DetailPanelState =
@@ -376,6 +376,10 @@ export default function App({
     pushToast(toast)
   })
 
+  const pushHistoryToast = useEffectEvent((toast: Omit<ToastItem, 'id'>) => {
+    pushToast(toast)
+  })
+
   useEffect(() => {
     if (!editorState.present || !editorState.savedAt) {
       return
@@ -455,7 +459,7 @@ export default function App({
       if (isUndo && editorState.undoStack.length > 0) {
         event.preventDefault()
         dispatch({ type: 'undo' })
-        pushToast({
+        pushHistoryToast({
           title: '되돌리기를 적용했습니다.',
           description: '직전 변경을 복구했습니다.',
           tone: 'accent',
@@ -465,7 +469,7 @@ export default function App({
       if (isRedo && editorState.redoStack.length > 0) {
         event.preventDefault()
         dispatch({ type: 'redo' })
-        pushToast({
+        pushHistoryToast({
           title: '다시 실행을 적용했습니다.',
           description: '되돌린 변경을 다시 반영했습니다.',
           tone: 'accent',

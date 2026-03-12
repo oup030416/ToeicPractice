@@ -49,7 +49,11 @@ export function DetailPanelContent({
 
   if (panel?.type === 'meta') {
     return (
-      <MetaEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
+      <MetaEditor
+        draft={editorState.present}
+        key={`meta-${editorState.rawText.length}-${editorState.savedAt ?? 'none'}`}
+        onCommitDraftChange={onCommitDraftChange}
+      />
     )
   }
 
@@ -58,6 +62,7 @@ export function DetailPanelContent({
       <EventEditor
         draft={editorState.present}
         eventId={selectedEvent?.id ?? panel.eventId}
+        key={`event-${selectedEvent?.id ?? panel.eventId}-${editorState.savedAt ?? 'none'}`}
         onCommitDraftChange={onCommitDraftChange}
       />
     )
@@ -102,13 +107,21 @@ export function DetailPanelContent({
 
   if (panel?.type === 'lookups') {
     return (
-      <LookupsEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
+      <LookupsEditor
+        draft={editorState.present}
+        key={`lookups-${editorState.savedAt ?? 'none'}`}
+        onCommitDraftChange={onCommitDraftChange}
+      />
     )
   }
 
   if (panel?.type === 'materials') {
     return (
-      <MaterialsEditor draft={editorState.present} onCommitDraftChange={onCommitDraftChange} />
+      <MaterialsEditor
+        draft={editorState.present}
+        key={`materials-${editorState.savedAt ?? 'none'}`}
+        onCommitDraftChange={onCommitDraftChange}
+      />
     )
   }
 

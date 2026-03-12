@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { deleteValueAtPath, getValueAtPath, setValueAtPath } from '../lib/editor-state'
 import { asRecord, readString } from './editor-utils'
@@ -24,20 +24,6 @@ export function MetaEditor({
     event_count: readString(meta.event_count),
     materials_revision: readString(meta.materials_revision),
   })
-
-  useEffect(() => {
-    setForm({
-      workspace_id: readString(meta.workspace_id),
-      schema_version: readString(meta.schema_version),
-      scope: readString(meta.scope),
-      revision: readString(meta.revision),
-      previous_revision: readString(meta.previous_revision),
-      exported_at: readString(meta.exported_at),
-      exported_by: readString(meta.exported_by),
-      event_count: readString(meta.event_count),
-      materials_revision: readString(meta.materials_revision),
-    })
-  }, [JSON.stringify(meta)])
 
   function updateField(key: keyof typeof form, value: string) {
     setForm((current) => ({ ...current, [key]: value }))

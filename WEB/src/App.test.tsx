@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 
@@ -11,24 +11,12 @@ function loadSampleText() {
   return readFileSync(resolve(process.cwd(), '../sync/toeic_web_sync.json'), 'utf-8')
 }
 
-function buildDuplicateEventText() {
-  const sample = JSON.parse(loadSampleText()) as {
-    meta: { event_count: number }
-    events: Array<Record<string, unknown>>
-  }
-
-  sample.meta.event_count += 1
-  sample.events.push({ ...sample.events[0] })
-
-  return JSON.stringify(sample)
-}
-
 describe('App', () => {
   beforeEach(() => {
     window.localStorage.clear()
   })
 
-  it('restores the last stored sync file from localStorage', async () => {
+  it('restores the last stored draft and starts with empty undo/redo history', async () => {
     window.localStorage.setItem(
       'toeic-web-v1:last-sync-document',
       JSON.stringify({
@@ -43,9 +31,8 @@ describe('App', () => {
     expect(
       await screen.findByText('demel-toeic-workspace'),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText('Part 5 품사/동사 반응 추적 시작'),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '되돌리기' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: '다시 실행' })).toBeDisabled()
   })
 
   it('opens the raw json drawer', async () => {
@@ -61,11 +48,8 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    const rawJsonButtons = await screen.findAllByRole('button', {
-      name: '원본 JSON 보기',
-    })
-
-    await user.click(rawJsonButtons[0])
+    const rawButtons = await screen.findAllByRole('button', { name: '원본 JSON' })
+    await user.click(rawButtons[0])
 
     expect(
       await screen.findByRole('heading', { name: '원본 JSON' }),
@@ -75,21 +59,63 @@ describe('App', () => {
     ).toBeInTheDocument()
   })
 
-  it('shows a blocking alert when restored data has semantic errors', async () => {
+  it('edits meta.revision and supports undo/redo buttons', async () => {
     window.localStorage.setItem(
       'toeic-web-v1:last-sync-document',
       JSON.stringify({
-        rawText: buildDuplicateEventText(),
+        rawText: loadSampleText(),
         fileName: 'toeic_web_sync.json',
         savedAt: '2026-03-12T12:00:00+09:00',
       }),
     )
 
+    const user = userEvent.setup()
     render(<App />)
 
+    const metaButtons = await screen.findAllByRole('button', { name: '기본 정보' })
+    await user.click(metaButtons[0])
+
+    const revisionInput = await screen.findByLabelText('리비전 (revision)')
+    await user.clear(revisionInput)
+    await user.type(revisionInput, '9')
+    await user.click(screen.getByRole('button', { name: 'meta 적용' }))
+
+    expect(await screen.findByText('리비전 9')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '되돌리기' }))
+    expect(await screen.findByText('리비전 1')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '다시 실행' }))
+    expect(await screen.findByText('리비전 9')).toBeInTheDocument()
+  })
+
+  it('keeps editing enabled but disables download when a blocking error is introduced', async () => {
+    window.localStorage.setItem(
+      'toeic-web-v1:last-sync-document',
+      JSON.stringify({
+        rawText: loadSampleText(),
+        fileName: 'toeic_web_sync.json',
+        savedAt: '2026-03-12T12:00:00+09:00',
+      }),
+    )
+
+    const user = userEvent.setup()
+    render(<App />)
+
+    const metaButtons = await screen.findAllByRole('button', { name: '기본 정보' })
+    await user.click(metaButtons[0])
+
+    const workspaceInput = await screen.findByLabelText('워크스페이스 ID (workspace_id)')
+    const workspaceField = workspaceInput.closest('div')
+
+    expect(workspaceField).not.toBeNull()
+    await user.click(
+      within(workspaceField as HTMLElement).getByRole('button', { name: '이 필드 삭제' }),
+    )
+
     expect(
-      await screen.findByText('저장된 파일에 차단 오류가 있어 복원하지 않았습니다.'),
+      await screen.findByText('현재 드래프트에 차단 오류가 있습니다.'),
     ).toBeInTheDocument()
-    expect(screen.getAllByText(/event_id가 중복됩니다/)[0]).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '현재 JSON 다운로드' })).toBeDisabled()
   })
 })
