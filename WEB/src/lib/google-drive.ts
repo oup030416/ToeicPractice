@@ -91,6 +91,64 @@ interface DriveFile {
   mimeType?: string
 }
 
+function extractPickerDocs(data: GooglePickerResponseObject) {
+  const docsFromDefault = Array.isArray(data.docs) ? data.docs : null
+  if (docsFromDefault) {
+    return docsFromDefault
+  }
+
+  const documentsKey = window.google?.picker.Response.DOCUMENTS
+  if (!documentsKey) {
+    return []
+  }
+
+  const docsFromResponse = data[documentsKey]
+  return Array.isArray(docsFromResponse) ? (docsFromResponse as GooglePickerDocumentObject[]) : []
+}
+
+function extractPickerAction(data: GooglePickerResponseObject) {
+  if (typeof data.action === 'string') {
+    return data.action
+  }
+
+  const actionKey = window.google?.picker.Response.ACTION
+  const actionValue = actionKey ? data[actionKey] : null
+  return typeof actionValue === 'string' ? actionValue : null
+}
+
+function extractPickerFolder(data: GooglePickerResponseObject) {
+  const docs = extractPickerDocs(data)
+  const firstDoc = docs[0]
+
+  if (!firstDoc) {
+    return null
+  }
+
+  const idKey = window.google?.picker.Document.ID
+  const nameKey = window.google?.picker.Document.NAME
+  const folderId =
+    typeof firstDoc.id === 'string'
+      ? firstDoc.id
+      : idKey && typeof firstDoc[idKey] === 'string'
+        ? (firstDoc[idKey] as string)
+        : null
+  const folderName =
+    typeof firstDoc.name === 'string'
+      ? firstDoc.name
+      : nameKey && typeof firstDoc[nameKey] === 'string'
+        ? (firstDoc[nameKey] as string)
+        : null
+
+  if (!folderId) {
+    return null
+  }
+
+  return {
+    folderId,
+    folderName: folderName?.trim() ? folderName : 'Google Drive 폴더',
+  }
+}
+
 function loadConfig(): GoogleDriveConfig | null {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() ?? ''
   const apiKey = import.meta.env.VITE_GOOGLE_API_KEY?.trim() ?? ''
@@ -532,23 +590,20 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
         .setDeveloperKey(config.apiKey)
         .setAppId(config.appId)
         .setCallback((data) => {
-          if (data.action === window.google!.picker.Action.CANCEL) {
+          const action = extractPickerAction(data)
+
+          if (action === window.google!.picker.Action.CANCEL) {
             reject(new DriveAdapterError('picker', '폴더 선택이 취소되었습니다.'))
             return
           }
 
-          if (data.action !== window.google!.picker.Action.PICKED || !data.docs?.[0]?.id) {
+          const selectedFolder = extractPickerFolder(data)
+          if (action !== window.google!.picker.Action.PICKED || !selectedFolder) {
             reject(new DriveAdapterError('picker', '선택한 Google Drive 폴더를 확인하지 못했습니다.'))
             return
           }
 
-          resolve({
-            folderId: data.docs[0].id,
-            folderName:
-              typeof data.docs[0].name === 'string' && data.docs[0].name.trim()
-                ? data.docs[0].name
-                : 'Google Drive 폴더',
-          })
+          resolve(selectedFolder)
         })
         .build()
 

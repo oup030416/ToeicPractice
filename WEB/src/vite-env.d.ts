@@ -32,11 +32,13 @@ declare global {
     id?: string
     name?: string
     mimeType?: string
+    [key: string]: unknown
   }
 
   interface GooglePickerResponseObject {
     action?: string
     docs?: GooglePickerDocumentObject[]
+    [key: string]: unknown
   }
 
   interface GooglePickerDocsView {
@@ -71,8 +73,16 @@ declare global {
         PICKED: string
         CANCEL: string
       }
+      Document: {
+        ID: string
+        NAME: string
+      }
       DocsView: new (viewId: string) => GooglePickerDocsView
       PickerBuilder: new () => GooglePickerBuilder
+      Response: {
+        ACTION: string
+        DOCUMENTS: string
+      }
       ViewId: {
         FOLDERS: string
       }
