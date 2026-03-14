@@ -36,7 +36,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci --include=optional
-          npm install @rollup/rollup-linux-x64-gnu@4.59.0 lightningcss-linux-x64-gnu@1.31.1 --no-save
+          npm install @rollup/rollup-linux-x64-gnu@4.59.0 lightningcss-linux-x64-gnu@1.31.1 @tailwindcss/oxide-linux-x64-gnu@4.2.1 --no-save
         working-directory: WEB
 
       - name: Lint
