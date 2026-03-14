@@ -218,13 +218,12 @@ async function loadScript(src: string) {
   })
 }
 
-async function waitForGoogleGlobals() {
+async function waitForGoogleBaseLibraries() {
   const timeoutAt = Date.now() + 10_000
 
   while (Date.now() < timeoutAt) {
     if (
       window.google?.accounts.oauth2 &&
-      window.google?.picker &&
       window.gapi?.load
     ) {
       return
@@ -234,6 +233,35 @@ async function waitForGoogleGlobals() {
   }
 
   throw new DriveAdapterError('config', 'Google SDK 초기화가 시간 안에 끝나지 않았습니다.')
+}
+
+async function loadGooglePickerLibrary() {
+  await new Promise<void>((resolve, reject) => {
+    const timeoutId = window.setTimeout(() => {
+      reject(
+        new DriveAdapterError('config', 'Google Picker SDK 초기화가 시간 안에 끝나지 않았습니다.'),
+      )
+    }, 10_000)
+
+    window.gapi?.load('picker', {
+      callback: () => {
+        window.clearTimeout(timeoutId)
+        resolve()
+      },
+    })
+  })
+
+  const timeoutAt = Date.now() + 10_000
+
+  while (Date.now() < timeoutAt) {
+    if (window.google?.picker) {
+      return
+    }
+
+    await new Promise((resolve) => window.setTimeout(resolve, 100))
+  }
+
+  throw new DriveAdapterError('config', 'Google Picker SDK가 시간 안에 준비되지 않았습니다.')
 }
 
 class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
@@ -403,10 +431,8 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
       this.loaderPromise = (async () => {
         await loadScript('https://accounts.google.com/gsi/client')
         await loadScript('https://apis.google.com/js/api.js')
-        await waitForGoogleGlobals()
-        await new Promise<void>((resolve) => {
-          window.gapi?.load('picker', { callback: resolve })
-        })
+        await waitForGoogleBaseLibraries()
+        await loadGooglePickerLibrary()
       })()
     }
 
