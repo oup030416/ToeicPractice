@@ -36,7 +36,15 @@ VITE_GOOGLE_APP_ID=your-google-cloud-project-number
 4. Authorized JavaScript origins에 아래 주소를 넣는다.
    - `http://localhost:5173`
    - `https://oup030416.github.io`
-5. 개인용 운영이라면 OAuth testing mode와 본인 계정 test user 등록으로 시작한다.
+5. API key가 브라우저 키인지 확인하고 HTTP referrer 제한에 아래 주소를 넣는다.
+   - `http://localhost:5173/*`
+   - `https://oup030416.github.io/*`
+6. 개인용 운영이라면 OAuth testing mode와 본인 계정 test user 등록으로 시작한다.
+
+## Picker 장애 복구
+- 기본 폴더 선택은 Google Picker를 사용한다.
+- Picker가 폴더를 선택하지 못하면 `폴더 ID 직접 입력` 경로로 Google Drive 폴더 URL 또는 폴더 ID를 직접 넣어 연결할 수 있다.
+- 정적 relay 파일은 `WEB/public/picker-relay.html`로 제공된다.
 
 ## 현재 동작 원칙
 - 메인 저장소는 Google Drive 폴더 안의 `toeic_web_sync.json` 단일 파일이다.

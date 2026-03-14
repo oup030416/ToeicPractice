@@ -39,7 +39,9 @@ import {
 import {
   clearStoredDriveContext,
   createGoogleDriveSyncAdapter,
+  extractDriveFolderIdFromInput,
   isInvalidDriveContextError,
+  isPickerError,
   isReconnectRequiredError,
   loadStoredDriveContext,
   parseDriveDocumentText,
@@ -166,7 +168,10 @@ function driveTone(state: DriveConnectionState) {
     case 'syncing':
     case 'authorizing':
     case 'picking':
+    case 'manual-folder-entry':
       return 'brand'
+    case 'picker-failed':
+      return 'accent'
     case 'error':
     case 'reconnect-required':
       return 'danger'
@@ -201,6 +206,8 @@ export default function App({
   const [driveMessage, setDriveMessage] = useState('Google Drive에 연결되지 않았습니다.')
   const [driveSession, setDriveSession] = useState<DriveSession | null>(null)
   const [driveError, setDriveError] = useState<string | null>(null)
+  const [manualFolderValue, setManualFolderValue] = useState('')
+  const [showManualFolderEntry, setShowManualFolderEntry] = useState(false)
   const [showRecoveryTools, setShowRecoveryTools] = useState(false)
   const [isPending, startDashboardTransition] = useTransition()
   const deferredEventQuery = useDeferredValue(eventQuery, '')
@@ -381,6 +388,7 @@ export default function App({
   async function runDriveConnect(options: {
     interactive: boolean
     pickFolder: boolean
+    folderInput?: string | null
     successLabel: string
   }) {
       if (!adapter.isConfigured()) {
@@ -399,9 +407,19 @@ export default function App({
       }
 
       setDriveError(null)
-      setDriveState(options.pickFolder ? 'picking' : 'authorizing')
+      setDriveState(
+        options.folderInput?.trim()
+          ? 'manual-folder-entry'
+          : options.pickFolder
+            ? 'picking'
+            : 'authorizing',
+      )
       setDriveMessage(
-        options.pickFolder ? 'Google Drive 폴더를 선택하는 중입니다.' : 'Google 로그인을 확인하는 중입니다.',
+        options.folderInput?.trim()
+          ? '입력한 Google Drive 폴더를 확인하는 중입니다.'
+          : options.pickFolder
+            ? 'Google Drive 폴더를 선택하는 중입니다.'
+            : 'Google 로그인을 확인하는 중입니다.',
       )
 
       try {
@@ -409,9 +427,12 @@ export default function App({
           context: driveSession ?? loadStoredDriveContext(),
           interactive: options.interactive,
           pickFolder: options.pickFolder,
+          folderInput: options.folderInput ?? null,
           seedDocument: editorState.currentParsed,
         })
 
+        setShowManualFolderEntry(false)
+        setManualFolderValue('')
         await loadDriveDocument(result, options.successLabel)
       } catch (error) {
         const message = toDriveErrorMessage(error)
@@ -436,6 +457,19 @@ export default function App({
           setDriveError(message)
           pushToast({
             title: 'Google Drive 재연결이 필요합니다.',
+            description: message,
+            tone: 'danger',
+          })
+          return
+        }
+
+        if (isPickerError(error)) {
+          setDriveState('picker-failed')
+          setDriveMessage('Google Picker가 폴더를 확정하지 못했습니다. 수동 입력으로 연결하거나 Google Cloud 설정을 확인하세요.')
+          setDriveError(message)
+          setShowManualFolderEntry(true)
+          pushToast({
+            title: 'Google Picker 폴더 선택에 실패했습니다.',
             description: message,
             tone: 'danger',
           })
@@ -634,6 +668,45 @@ export default function App({
     })
   }
 
+  function toggleManualFolderEntry() {
+    setShowManualFolderEntry((current) => {
+      const next = !current
+
+      if (next) {
+        setDriveState('manual-folder-entry')
+        setDriveMessage('Google Drive 폴더 URL 또는 폴더 ID를 직접 입력해 연결할 수 있습니다.')
+      } else if (!driveSession && driveState === 'manual-folder-entry') {
+        setDriveState('disconnected')
+        setDriveMessage('Google Drive에 연결되지 않았습니다.')
+      }
+
+      return next
+    })
+  }
+
+  async function handleManualFolderConnect() {
+    const normalizedFolderId = extractDriveFolderIdFromInput(manualFolderValue)
+    if (!normalizedFolderId) {
+      const message = 'Google Drive 폴더 URL 또는 폴더 ID 형식이 아닙니다.'
+      setDriveState('manual-folder-entry')
+      setDriveMessage(message)
+      setDriveError(message)
+      pushToast({
+        title: '폴더 입력 형식을 확인하세요.',
+        description: message,
+        tone: 'danger',
+      })
+      return
+    }
+
+    await runDriveConnect({
+      interactive: true,
+      pickFolder: false,
+      folderInput: normalizedFolderId,
+      successLabel: '직접 입력한 Google Drive 폴더',
+    })
+  }
+
   useEffect(() => {
     if (hydrateRef.current) {
       return
@@ -760,6 +833,7 @@ export default function App({
                   <button className={cn(actionButtonClass, 'border-white/20 bg-white/10 text-white hover:bg-white/16 disabled:cursor-not-allowed disabled:opacity-50')} disabled={driveState === 'authorizing' || driveState === 'picking' || !adapter.isConfigured()} onClick={() => void runDriveConnect({ interactive: true, pickFolder: true, successLabel: 'Google Drive 폴더' })} type="button"><Cloud className="size-4" />{driveSession ? '폴더 변경' : 'Google Drive 연결'}</button>
                   <button className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55 disabled:cursor-not-allowed disabled:opacity-50')} disabled={!driveSession || driveState === 'syncing' || driveState === 'authorizing' || driveState === 'picking'} onClick={() => void runDriveRefresh()} type="button"><RefreshCw className="size-4" />지금 새로고침</button>
                   <button className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55 disabled:cursor-not-allowed disabled:opacity-50')} disabled={!driveSession || (driveState !== 'reconnect-required' && driveState !== 'error')} onClick={() => void runDriveConnect({ interactive: true, pickFolder: false, successLabel: 'Google Drive 재연결' })} type="button"><Cloud className="size-4" />재연결</button>
+                  <button className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55')} onClick={toggleManualFolderEntry} type="button"><FolderInput className="size-4" />폴더 ID 직접 입력</button>
                   <button className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55')} onClick={() => setShowRecoveryTools((current) => !current)} type="button"><Settings2 className="size-4" />비상 복구</button>
                   <button aria-label="되돌리기" className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55 disabled:cursor-not-allowed disabled:opacity-50')} disabled={editorState.undoStack.length === 0} onClick={() => { dispatch({ type: 'undo' }); pushToast({ title: '되돌리기를 적용했습니다.', description: '직전 변경을 복구했습니다.', tone: 'accent' }) }} type="button"><Undo2 className="size-4" />되돌리기</button>
                   <button aria-label="다시 실행" className={cn(actionButtonClass, 'border-white/18 bg-slate-950/35 text-white hover:bg-slate-950/55 disabled:cursor-not-allowed disabled:opacity-50')} disabled={editorState.redoStack.length === 0} onClick={() => { dispatch({ type: 'redo' }); pushToast({ title: '다시 실행을 적용했습니다.', description: '되돌린 변경을 다시 반영했습니다.', tone: 'accent' }) }} type="button"><Redo2 className="size-4" />다시 실행</button>
@@ -780,6 +854,23 @@ export default function App({
                   {driveSession ? <><p>연결 폴더: {driveSession.folderName}</p><p>계정: {driveSession.accountEmail ?? '알 수 없음'}</p></> : null}
                   {workspaceId ? <p>워크스페이스: {workspaceId}</p> : null}
                 </div>
+
+                {showManualFolderEntry ? (
+                  <div className="rounded-3xl border border-white/12 bg-slate-950/35 px-4 py-4 text-sm text-blue-50/85">
+                    <div className="mb-3 flex items-center gap-2 text-white"><FolderInput className="size-4" /><p className="font-semibold">폴더 URL 또는 ID 직접 입력</p></div>
+                    <p className="mb-4 leading-6">Picker가 폴더를 선택하지 못할 때 사용하세요. Google Drive 폴더 URL 전체를 붙여넣거나 폴더 ID만 넣어도 됩니다.</p>
+                    <div className="space-y-3">
+                      <input className="w-full rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm text-white outline-none placeholder:text-blue-100/45 focus:border-blue-300" onChange={(event) => setManualFolderValue(event.target.value)} placeholder="https://drive.google.com/drive/folders/... 또는 폴더 ID" value={manualFolderValue} />
+                      <div className="flex flex-wrap gap-3">
+                        <button className={cn(actionButtonClass, 'border-white/16 bg-white/10 text-white hover:bg-white/16 disabled:cursor-not-allowed disabled:opacity-50')} disabled={!manualFolderValue.trim() || driveState === 'authorizing' || driveState === 'picking'} onClick={() => void handleManualFolderConnect()} type="button"><Cloud className="size-4" />입력한 폴더로 연결</button>
+                        <button className={cn(actionButtonClass, 'border-white/16 bg-slate-950/35 text-white hover:bg-slate-950/55')} onClick={toggleManualFolderEntry} type="button">닫기</button>
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-white/6 px-4 py-3 text-xs leading-6 text-blue-50/75">
+                        <p>점검 항목: Google Picker API 활성화, Google Drive API 활성화, API key HTTP referrer에 `https://oup030416.github.io/*`, OAuth origin에 `https://oup030416.github.io` 등록.</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
 
                 {showRecoveryTools ? (
                   <div className="rounded-3xl border border-white/12 bg-slate-950/35 px-4 py-4 text-sm text-blue-50/85">
@@ -822,11 +913,11 @@ export default function App({
           ) : null}
 
           {driveError && !loadAlert ? (
-            <section className={cn('rounded-3xl px-5 py-4 shadow-sm', driveState === 'reconnect-required' ? 'border border-amber-200 bg-amber-50 text-amber-950' : 'border border-rose-200 bg-rose-50 text-rose-950')} role="alert">
+            <section className={cn('rounded-3xl px-5 py-4 shadow-sm', driveState === 'reconnect-required' ? 'border border-amber-200 bg-amber-50 text-amber-950' : driveState === 'picker-failed' ? 'border border-amber-200 bg-amber-50 text-amber-950' : 'border border-rose-200 bg-rose-50 text-rose-950')} role="alert">
               <div className="flex items-start gap-3">
                 <TriangleAlert className="mt-0.5 size-5 shrink-0" />
                 <div className="space-y-2">
-                  <p className="text-sm font-semibold leading-6">{driveState === 'reconnect-required' ? 'Google Drive 재연결이 필요합니다.' : 'Google Drive 오류가 발생했습니다.'}</p>
+                  <p className="text-sm font-semibold leading-6">{driveState === 'reconnect-required' ? 'Google Drive 재연결이 필요합니다.' : driveState === 'picker-failed' ? 'Google Picker가 폴더를 고르지 못했습니다.' : 'Google Drive 오류가 발생했습니다.'}</p>
                   <p className="text-sm leading-6">{driveError}</p>
                 </div>
               </div>

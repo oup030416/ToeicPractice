@@ -15,6 +15,8 @@ export type DriveConnectionState =
   | 'disconnected'
   | 'authorizing'
   | 'picking'
+  | 'picker-failed'
+  | 'manual-folder-entry'
   | 'connected'
   | 'syncing'
   | 'reconnect-required'
@@ -50,6 +52,7 @@ export interface DriveSyncAdapter {
     context: StoredDriveContext | null
     interactive: boolean
     pickFolder: boolean
+    folderInput?: string | null
     seedDocument: ToeicWebSyncV1 | null
   }): Promise<DriveBootstrapResult>
   refresh(session: DriveSession): Promise<DriveBootstrapResult>
@@ -90,6 +93,8 @@ interface DriveFile {
   modifiedTime?: string
   mimeType?: string
 }
+
+const PICKER_RESPONSE_TIMEOUT_MS = 15_000
 
 function extractPickerDocs(data: GooglePickerResponseObject) {
   const docsFromDefault = Array.isArray(data.docs) ? data.docs : null
@@ -147,6 +152,71 @@ function extractPickerFolder(data: GooglePickerResponseObject) {
     folderId,
     folderName: folderName?.trim() ? folderName : 'Google Drive 폴더',
   }
+}
+
+function logPickerDebug(event: string, payload: unknown) {
+  if (!import.meta.env.DEV) {
+    return
+  }
+
+  console.info('[GoogleDrivePicker]', event, payload)
+}
+
+function buildPickerFailureMessage(data: GooglePickerResponseObject) {
+  const action = extractPickerAction(data)
+  const docs = extractPickerDocs(data)
+
+  if (!action) {
+    return 'OAuth 로그인에는 성공했지만 Google Picker 응답 형식을 확인하지 못했습니다. relay 또는 API key referrer 설정을 확인하세요.'
+  }
+
+  if (action === window.google?.picker.Action.PICKED && docs.length === 0) {
+    return 'Google Picker 응답에 문서가 없습니다. API key referrer 또는 Google Picker API 설정을 확인하세요.'
+  }
+
+  return 'OAuth 로그인에는 성공했지만 Picker API 단계에서 폴더 정보를 주지 않았습니다. API key referrer와 relay 설정을 확인하세요.'
+}
+
+function buildPickerTimeoutMessage() {
+  return 'Google Picker 응답이 오지 않았습니다. API key referrer, Google Picker API, relay 설정을 확인하세요.'
+}
+
+function extractDriveFolderIdFromUrl(urlText: string) {
+  try {
+    const url = new URL(urlText)
+    const pathMatch = url.pathname.match(/\/folders\/([a-zA-Z0-9_-]+)/)
+    if (pathMatch?.[1]) {
+      return pathMatch[1]
+    }
+
+    const queryId = url.searchParams.get('id')
+    return queryId?.trim() ? queryId : null
+  } catch {
+    return null
+  }
+}
+
+export function extractDriveFolderIdFromInput(input: string) {
+  const trimmed = input.trim()
+  if (!trimmed) {
+    return null
+  }
+
+  const urlId = extractDriveFolderIdFromUrl(trimmed)
+  if (urlId) {
+    return urlId
+  }
+
+  return /^[a-zA-Z0-9_-]{20,}$/.test(trimmed) ? trimmed : null
+}
+
+function buildPickerRelayUrl() {
+  if (typeof window === 'undefined') {
+    return ''
+  }
+
+  const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin)
+  return new URL('picker-relay.html', baseUrl).toString()
 }
 
 function loadConfig(): GoogleDriveConfig | null {
@@ -344,6 +414,7 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
     context: StoredDriveContext | null
     interactive: boolean
     pickFolder: boolean
+    folderInput?: string | null
     seedDocument: ToeicWebSyncV1 | null
   }): Promise<DriveBootstrapResult> {
     const config = this.requireConfig()
@@ -357,7 +428,11 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
     let folderId = options.context?.folderId ?? null
     let folderName = options.context?.folderName ?? null
 
-    if (options.pickFolder || !folderId || !folderName) {
+    if (options.folderInput?.trim()) {
+      const resolvedFolder = await this.resolveFolderInput(options.folderInput, token.accessToken)
+      folderId = resolvedFolder.folderId
+      folderName = resolvedFolder.folderName
+    } else if (options.pickFolder || !folderId || !folderName) {
       const picked = await this.pickFolder(token.accessToken, config)
       folderId = picked.folderId
       folderName = picked.folderName
@@ -575,6 +650,26 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
     }
   }
 
+  private async resolveFolderInput(input: string, accessToken: string) {
+    const folderId = extractDriveFolderIdFromInput(input)
+    if (!folderId) {
+      throw new DriveAdapterError(
+        'picker',
+        'Google Drive 폴더 URL 또는 폴더 ID 형식이 아닙니다.',
+      )
+    }
+
+    const metadata = await this.readFileMetadata(folderId, accessToken)
+    if (metadata.mimeType !== DRIVE_FOLDER_MIME_TYPE) {
+      throw new DriveAdapterError('picker', '입력한 대상이 Google Drive 폴더가 아닙니다.')
+    }
+
+    return {
+      folderId: metadata.id,
+      folderName: metadata.name?.trim() ? metadata.name : 'Google Drive 폴더',
+    }
+  }
+
   private async pickFolder(accessToken: string, config: GoogleDriveConfig) {
     await this.ensureLibraries()
 
@@ -591,23 +686,32 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
         .setDeveloperKey(config.apiKey)
         .setAppId(config.appId)
         .setOrigin(window.location.origin)
+        .setRelayUrl(buildPickerRelayUrl())
         .setCallback((data) => {
+          logPickerDebug('callback', data)
           const action = extractPickerAction(data)
 
           if (action === window.google!.picker.Action.CANCEL) {
+            window.clearTimeout(timeoutId)
             reject(new DriveAdapterError('picker', '폴더 선택이 취소되었습니다.'))
             return
           }
 
           const selectedFolder = extractPickerFolder(data)
           if (action !== window.google!.picker.Action.PICKED || !selectedFolder) {
-            reject(new DriveAdapterError('picker', '선택한 Google Drive 폴더를 확인하지 못했습니다.'))
+            window.clearTimeout(timeoutId)
+            reject(new DriveAdapterError('picker', buildPickerFailureMessage(data)))
             return
           }
 
+          window.clearTimeout(timeoutId)
           resolve(selectedFolder)
         })
         .build()
+
+      const timeoutId = window.setTimeout(() => {
+        reject(new DriveAdapterError('picker', buildPickerTimeoutMessage()))
+      }, PICKER_RESPONSE_TIMEOUT_MS)
 
       picker.setVisible(true)
     })
@@ -858,6 +962,10 @@ export function toDriveErrorMessage(error: unknown) {
 
 export function isReconnectRequiredError(error: unknown) {
   return isDriveAdapterError(error) && error.code === 'auth'
+}
+
+export function isPickerError(error: unknown) {
+  return isDriveAdapterError(error) && error.code === 'picker'
 }
 
 export function isInvalidDriveContextError(error: unknown) {

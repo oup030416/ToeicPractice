@@ -54,6 +54,7 @@ declare global {
     setDeveloperKey(apiKey: string): GooglePickerBuilder
     setAppId(appId: string): GooglePickerBuilder
     setOrigin(origin: string): GooglePickerBuilder
+    setRelayUrl(url: string): GooglePickerBuilder
     setCallback(callback: (data: GooglePickerResponseObject) => void): GooglePickerBuilder
     build(): {
       setVisible(visible: boolean): void

@@ -80,7 +80,7 @@ describe('App', () => {
 
     render(<App driveAdapter={createMockDriveAdapter()} />)
 
-    expect(await screen.findByText('demel-toeic-workspace')).toBeInTheDocument()
+    expect((await screen.findAllByText('demel-toeic-workspace'))[0]).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '되돌리기' })).toBeDisabled()
     expect(screen.getByRole('button', { name: '다시 실행' })).toBeDisabled()
   })
@@ -137,4 +137,21 @@ describe('App', () => {
     await user.click(screen.getAllByRole('button', { name: '비상 복구' })[0])
     expect(screen.getByRole('button', { name: 'JSON 파일로 내보내기' })).toBeDisabled()
   })
+
+  it('allows connecting with a manually entered Google Drive folder id', async () => {
+    const user = userEvent.setup()
+    const driveAdapter = createMockDriveAdapter()
+    render(<App driveAdapter={driveAdapter} />)
+
+    await user.click(screen.getAllByRole('button', { name: '폴더 ID 직접 입력' })[0])
+    await user.type(
+      screen.getByPlaceholderText(
+        'https://drive.google.com/drive/folders/... 또는 폴더 ID',
+      ),
+      'https://drive.google.com/drive/folders/1AbCdEfGhIjKlMnOpQrStUvWxYz12345?usp=sharing',
+    )
+    await user.click(screen.getByRole('button', { name: '입력한 폴더로 연결' }))
+
+    expect((await screen.findAllByText('demel-toeic-workspace'))[0]).toBeInTheDocument()
+  }, 10000)
 })
