@@ -713,6 +713,13 @@ export default function App({
                     현재 작업 워크스페이스: {workspaceId}
                   </p>
                 ) : null}
+                <div className="rounded-3xl border border-white/12 bg-white/8 px-4 py-3 text-sm leading-6 text-blue-50/85">
+                  <p>임시 저장은 이 기기의 브라우저 localStorage에만 남습니다.</p>
+                  <p>
+                    모바일이나 다른 기기에서 이어하려면 현재 JSON을 다운로드한 뒤 그 기기에서 다시
+                    업로드해야 합니다.
+                  </p>
+                </div>
               </div>
             </div>
           </header>
