@@ -49,9 +49,11 @@ declare global {
 
   interface GooglePickerBuilder {
     addView(view: GooglePickerDocsView): GooglePickerBuilder
+    setDocument(document: Document): GooglePickerBuilder
     setOAuthToken(token: string): GooglePickerBuilder
     setDeveloperKey(apiKey: string): GooglePickerBuilder
     setAppId(appId: string): GooglePickerBuilder
+    setOrigin(origin: string): GooglePickerBuilder
     setCallback(callback: (data: GooglePickerResponseObject) => void): GooglePickerBuilder
     build(): {
       setVisible(visible: boolean): void

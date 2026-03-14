@@ -586,9 +586,11 @@ class BrowserGoogleDriveSyncAdapter implements DriveSyncAdapter {
 
       const picker = new window.google!.picker.PickerBuilder()
         .addView(view)
+        .setDocument(window.document)
         .setOAuthToken(accessToken)
         .setDeveloperKey(config.apiKey)
         .setAppId(config.appId)
+        .setOrigin(window.location.origin)
         .setCallback((data) => {
           const action = extractPickerAction(data)
 
