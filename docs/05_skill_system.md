@@ -33,6 +33,7 @@
 6. RC 문항 분류와 taxonomy 태깅은 `toeic-rc-analysis-desk`를 쓴다.
 7. RC 대량 모듈 생성은 `toeic-rc-bank-builder`를 쓴다.
 8. 웹에서 받은 `sync/toeic_web_sync.json`을 반영하거나 다시 내보낼 때는 `toeic-study-orchestrator`가 전체 순서를 잡고, 필요한 경우 RC 분류와 Q&A 메모리 계층으로 라우팅한다.
+9. 문제 대량 생산 요청은 `docs/14_item_production_playbook.md`의 배치 규칙과 `templates/problem_batch_request_template.md`를 기본 계약으로 쓴다.
 
 ## 공통 고정 규칙
 - 사용자에게 보이는 설명과 안내는 한국어로 유지한다.
@@ -43,6 +44,7 @@
 - 공식 점수 추정은 하지 않는다.
 - 웹 연동 파일 `sync/toeic_web_sync.json`은 RC 전용 단일 교환 파일로 취급한다.
 - 웹은 원시 이벤트만 쓰고, Codex는 파생 이벤트만 쓴다.
+- 문제 대량 생산은 공식 앵커 기반 변형·재구성만 허용하며, 기출 직접 복제와 full mock 자동 생성은 금지한다.
 
 ## 자주 쓰는 호출 예시
 - `이번 세션 시작` -> `toeic-study-orchestrator`
@@ -53,6 +55,7 @@
 - `이 기능을 도입할 가치가 있나?` -> `codex-evidence-gate`
 - `이 RC 문항 유형 분류해줘` -> `toeic-rc-analysis-desk`
 - `Part 5 품사 반응 50문항 뱅크 만들어줘` -> `toeic-rc-bank-builder` 후 `toeic-review-auditor`
+- `공개문항 앵커 기준으로 Part 7 paraphrase 30문항 배치 만들어줘` -> `docs/14_item_production_playbook.md` 기준으로 `toeic-rc-bank-builder` 또는 `toeic-drill-generator` 후 `toeic-review-auditor`
 - `웹사이트에서 받은 toeic_web_sync.json 반영해줘` -> `toeic-study-orchestrator`
 - `현재 프로젝트 상태를 웹 업로드용 toeic_web_sync.json으로 내보내줘` -> `toeic-study-orchestrator`
 

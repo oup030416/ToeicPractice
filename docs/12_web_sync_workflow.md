@@ -46,13 +46,17 @@
 
 ## 프로젝트 -> 웹 내보내기
 1. 현재 프로젝트의 최신 상태를 읽는다.
-2. `tracking/rc_weakness_registry.md` 기준으로 `rc_weakness.recomputed`를 만든다.
-3. `tracking/progress_dashboard.md` 기준으로 `dashboard.published`를 만든다.
-4. 최신 RC 추천 3개를 `recommendation.published`로 만든다.
-5. 새 드릴이 있으면 `materials.drill_sets`와 `drill_set.published`를 갱신한다.
-6. revision을 1 올리고 `previous_revision`을 직전 revision으로 기록한다.
-7. `event_count`를 다시 계산한다.
-8. 갱신된 파일을 사용자가 웹사이트에 업로드한다.
+2. 생성된 개별 드릴 세트는 `materials/drill_sets/<part>/<set_id>.json`에 먼저 저장한다.
+3. 사용자가 `json 작업 시작`이라고 지시하면, 이 export 절차를 즉시 실행하는 신호로 해석한다.
+4. 웹으로 보낼 때만 루트 명령 `npm run sync:export-drills -- --base sync/toeic_web_sync.json --input materials/drill_sets --out <path>`를 실행한다.
+5. export 유틸은 기본적으로 `review_status = reviewed` 세트만 읽는다.
+6. export 유틸은 새 드릴을 `materials.drill_sets`에 합치고 세트마다 `drill_set.published` 이벤트를 추가한다.
+7. 그 다음 `tracking/rc_weakness_registry.md` 기준으로 `rc_weakness.recomputed`를 만든다.
+8. `tracking/progress_dashboard.md` 기준으로 `dashboard.published`를 만든다.
+9. 최신 RC 추천 3개를 `recommendation.published`로 만든다.
+10. revision을 1 올리고 `previous_revision`을 직전 revision으로 기록한다.
+11. `event_count`를 다시 계산한다.
+12. 갱신된 파일을 사용자가 웹사이트에 업로드한다.
 
 ## 반영 매핑
 - `session.recorded` -> 세션 로그
@@ -64,6 +68,16 @@
 - `rc_weakness.recomputed` -> RC 약점 레지스트리
 - `recommendation.published` -> 추천 스냅샷과 대시보드 추천
 - `dashboard.published` -> 진행 대시보드
+- `drill_set.published` -> 새 drill_set 게시 이력
+
+## drill_set.published payload
+- `set_id`
+- `title`
+- `target_part`
+- `target_skill`
+- `difficulty`
+- `item_count`
+- `review_status`
 
 ## 충돌 처리
 - 오래된 revision 파일은 자동 병합하지 않는다.

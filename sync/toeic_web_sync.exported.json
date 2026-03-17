@@ -1,0 +1,1906 @@
+{
+  "meta": {
+    "workspace_id": "demel-toeic-workspace",
+    "schema_version": "toeic-web-sync/v1",
+    "scope": "rc",
+    "revision": 2,
+    "previous_revision": 1,
+    "exported_at": "2026-03-13T05:28:14.389Z",
+    "exported_by": "codex",
+    "event_count": 5,
+    "materials_revision": 2
+  },
+  "lookups": {
+    "parts": [
+      "Part 5",
+      "Part 6",
+      "Part 7"
+    ],
+    "question_types": {
+      "Part 5": [
+        "parts of speech",
+        "verb form",
+        "tense",
+        "subject-verb agreement",
+        "voice",
+        "infinitive / gerund / participle",
+        "relative clause",
+        "preposition",
+        "conjunction",
+        "vocabulary choice",
+        "collocation"
+      ],
+      "Part 6": [
+        "context completion",
+        "sentence insertion",
+        "coherence cue",
+        "referent tracking",
+        "logical connection",
+        "vocabulary consistency"
+      ],
+      "Part 7": [
+        "specific info",
+        "purpose",
+        "inference",
+        "connect info",
+        "paraphrase",
+        "NOT / EXCEPT",
+        "multi-document link",
+        "visual info integration"
+      ]
+    },
+    "skill_tags": [
+      "grammar reaction",
+      "vocabulary discrimination",
+      "context completion",
+      "sentence insertion",
+      "coherence cue",
+      "evidence location",
+      "paraphrase tracking",
+      "connect info",
+      "inference extraction",
+      "multi-document link"
+    ],
+    "vocab_domains": [
+      "contracts",
+      "negotiations",
+      "marketing",
+      "sales",
+      "warranties",
+      "offices",
+      "personnel",
+      "purchasing",
+      "travel",
+      "finance",
+      "business planning",
+      "conferences",
+      "housing",
+      "dining out",
+      "entertainment",
+      "health",
+      "corporate development",
+      "general business"
+    ],
+    "document_genres": [
+      "email",
+      "letter",
+      "notice",
+      "advertisement",
+      "article",
+      "form",
+      "online chat",
+      "text message chain",
+      "schedule",
+      "report",
+      "instruction",
+      "information page",
+      "memo"
+    ],
+    "error_types": [
+      "grammar",
+      "vocabulary",
+      "paraphrase",
+      "connect-info",
+      "inference",
+      "evidence-location",
+      "time-pressure",
+      "mixed"
+    ],
+    "review_states": [
+      "new",
+      "reviewed",
+      "repeated",
+      "stabilized"
+    ],
+    "recommendation_strengths": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ]
+  },
+  "materials": {
+    "official_sets": [],
+    "drill_sets": [
+      {
+        "set_id": "drill-p5-parts-of-speech-batch-001",
+        "title": "Part 5 Parts of Speech Reaction Batch 001",
+        "source_anchor": "한국TOEIC위원회 공개문항 Part 5 계열 표현 관찰 기준",
+        "generation_mode": "transform",
+        "target_part": "Part 5",
+        "target_skill": "parts of speech",
+        "difficulty": "medium",
+        "items": [
+          {
+            "item_id": "drill-p5-pos-b001-q01",
+            "question_no": 1,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "corporate development",
+            "document_genre": "memo",
+            "stem": "The company plans to hire a ______ consultant for the system upgrade.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "specialize"
+              },
+              {
+                "key": "B",
+                "text": "specialized"
+              },
+              {
+                "key": "C",
+                "text": "specializes"
+              },
+              {
+                "key": "D",
+                "text": "specialization"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "관사 뒤에서 consultant를 수식하므로 형용사 specialized가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q02",
+            "question_no": 2,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "travel",
+            "document_genre": "form",
+            "stem": "Employees must submit their travel receipts with ______ to avoid reimbursement delays.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "accurate"
+              },
+              {
+                "key": "B",
+                "text": "accurately"
+              },
+              {
+                "key": "C",
+                "text": "accuracy"
+              },
+              {
+                "key": "D",
+                "text": "accuracies"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "전치사 with 뒤 목적어 자리에 명사 accuracy가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q03",
+            "question_no": 3,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "offices",
+            "document_genre": "information page",
+            "stem": "The new printer is easy to use and highly ______ for small offices.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "practical"
+              },
+              {
+                "key": "B",
+                "text": "practice"
+              },
+              {
+                "key": "C",
+                "text": "practically"
+              },
+              {
+                "key": "D",
+                "text": "practiced"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "be동사 뒤 보어 자리이므로 형용사 practical이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q04",
+            "question_no": 4,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "travel",
+            "document_genre": "report",
+            "stem": "Because of the heavy rain, several flights experienced ______ delays.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "extend"
+              },
+              {
+                "key": "B",
+                "text": "extending"
+              },
+              {
+                "key": "C",
+                "text": "extension"
+              },
+              {
+                "key": "D",
+                "text": "extensive"
+              }
+            ],
+            "correct_answer": "D",
+            "explanation": "명사 delays를 수식하는 형용사 extensive가 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q05",
+            "question_no": 5,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "finance",
+            "document_genre": "report",
+            "stem": "The director gave a ______ explanation of the revised budget plan.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "clearly"
+              },
+              {
+                "key": "B",
+                "text": "clear"
+              },
+              {
+                "key": "C",
+                "text": "clearance"
+              },
+              {
+                "key": "D",
+                "text": "clearing"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "관사 뒤에서 explanation을 수식하는 형용사 clear가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q06",
+            "question_no": 6,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "general business",
+            "document_genre": "report",
+            "stem": "Customer feedback showed a high level of ______ with the updated mobile app.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "satisfy"
+              },
+              {
+                "key": "B",
+                "text": "satisfactory"
+              },
+              {
+                "key": "C",
+                "text": "satisfaction"
+              },
+              {
+                "key": "D",
+                "text": "satisfying"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "of 뒤 목적어 자리에 명사 satisfaction이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q07",
+            "question_no": 7,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "conferences",
+            "document_genre": "instruction",
+            "stem": "The manager asked the staff to remain ______ during the emergency drill.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "calm"
+              },
+              {
+                "key": "B",
+                "text": "calmly"
+              },
+              {
+                "key": "C",
+                "text": "calmed"
+              },
+              {
+                "key": "D",
+                "text": "calmness"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "remain 뒤 보어 자리이므로 형용사 calm이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q08",
+            "question_no": 8,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "purchasing",
+            "document_genre": "email",
+            "stem": "Our supplier responded ______ to the request for additional product details.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "prompt"
+              },
+              {
+                "key": "B",
+                "text": "prompting"
+              },
+              {
+                "key": "C",
+                "text": "promptness"
+              },
+              {
+                "key": "D",
+                "text": "promptly"
+              }
+            ],
+            "correct_answer": "D",
+            "explanation": "동사 responded를 수식해야 하므로 부사 promptly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q09",
+            "question_no": 9,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "sales",
+            "document_genre": "report",
+            "stem": "The sales representative is known for her ______ communication with clients.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "effectively"
+              },
+              {
+                "key": "B",
+                "text": "effective"
+              },
+              {
+                "key": "C",
+                "text": "effect"
+              },
+              {
+                "key": "D",
+                "text": "effectiveness"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "명사 communication을 수식하는 형용사 effective가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q10",
+            "question_no": 10,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "offices",
+            "document_genre": "notice",
+            "stem": "For security reasons, visitors are required to show photo ______ at the front desk.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "identify"
+              },
+              {
+                "key": "B",
+                "text": "identifiable"
+              },
+              {
+                "key": "C",
+                "text": "identification"
+              },
+              {
+                "key": "D",
+                "text": "identically"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "show의 목적어 자리에 명사 identification이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q11",
+            "question_no": 11,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "personnel",
+            "document_genre": "form",
+            "stem": "All applicants must provide ______ references before the interview.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "professional"
+              },
+              {
+                "key": "B",
+                "text": "professionally"
+              },
+              {
+                "key": "C",
+                "text": "profession"
+              },
+              {
+                "key": "D",
+                "text": "professionalism"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "명사 references를 수식하는 형용사 professional이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q12",
+            "question_no": 12,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "finance",
+            "document_genre": "report",
+            "stem": "The finance team reviewed the proposal with great ______ before approving the budget.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "careful"
+              },
+              {
+                "key": "B",
+                "text": "carefully"
+              },
+              {
+                "key": "C",
+                "text": "care"
+              },
+              {
+                "key": "D",
+                "text": "careless"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "with great 뒤 목적어 자리에 명사 care가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q13",
+            "question_no": 13,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "conferences",
+            "document_genre": "memo",
+            "stem": "Our branch manager spoke ______ about the new customer service policy at the meeting.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "confident"
+              },
+              {
+                "key": "B",
+                "text": "confidence"
+              },
+              {
+                "key": "C",
+                "text": "confidently"
+              },
+              {
+                "key": "D",
+                "text": "confidential"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "동사 spoke를 수식해야 하므로 부사 confidently가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q14",
+            "question_no": 14,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "travel",
+            "document_genre": "instruction",
+            "stem": "The revised handbook provides ______ instructions for submitting expense claims.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "clarity"
+              },
+              {
+                "key": "B",
+                "text": "clear"
+              },
+              {
+                "key": "C",
+                "text": "clearly"
+              },
+              {
+                "key": "D",
+                "text": "clearance"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "명사 instructions를 수식하므로 형용사 clear가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q15",
+            "question_no": 15,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "contracts",
+            "document_genre": "email",
+            "stem": "Please send the signed contract to the legal department for ______ review.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "final"
+              },
+              {
+                "key": "B",
+                "text": "finalize"
+              },
+              {
+                "key": "C",
+                "text": "finally"
+              },
+              {
+                "key": "D",
+                "text": "finality"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "review를 수식하는 형용사 final이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q16",
+            "question_no": 16,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "marketing",
+            "document_genre": "advertisement",
+            "stem": "The marketing campaign was designed to attract ______ customers in overseas markets.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "potential"
+              },
+              {
+                "key": "B",
+                "text": "potentially"
+              },
+              {
+                "key": "C",
+                "text": "potency"
+              },
+              {
+                "key": "D",
+                "text": "potent"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "명사 customers를 수식하는 형용사 potential이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q17",
+            "question_no": 17,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "offices",
+            "document_genre": "notice",
+            "stem": "The receptionist handled the scheduling change with remarkable ______.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "efficient"
+              },
+              {
+                "key": "B",
+                "text": "efficiency"
+              },
+              {
+                "key": "C",
+                "text": "efficiently"
+              },
+              {
+                "key": "D",
+                "text": "inefficient"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "with remarkable 뒤 목적어 자리에 명사 efficiency가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q18",
+            "question_no": 18,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "sales",
+            "document_genre": "email",
+            "stem": "Sales representatives are expected to respond ______ to client inquiries.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "prompt"
+              },
+              {
+                "key": "B",
+                "text": "promptness"
+              },
+              {
+                "key": "C",
+                "text": "promptly"
+              },
+              {
+                "key": "D",
+                "text": "prompting"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "동사 respond를 수식하므로 부사 promptly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q19",
+            "question_no": 19,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "conferences",
+            "document_genre": "information page",
+            "stem": "The conference room is fully ______ with video conferencing tools.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "equip"
+              },
+              {
+                "key": "B",
+                "text": "equipment"
+              },
+              {
+                "key": "C",
+                "text": "equipping"
+              },
+              {
+                "key": "D",
+                "text": "equipped"
+              }
+            ],
+            "correct_answer": "D",
+            "explanation": "be동사 뒤 보어 자리에서 수동 의미를 나타내는 형용사/과거분사 equipped가 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q20",
+            "question_no": 20,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "corporate development",
+            "document_genre": "notice",
+            "stem": "Due to limited seating, early ______ is recommended for the training session.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "register"
+              },
+              {
+                "key": "B",
+                "text": "registering"
+              },
+              {
+                "key": "C",
+                "text": "registration"
+              },
+              {
+                "key": "D",
+                "text": "registered"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "주어 자리에는 명사 registration이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q21",
+            "question_no": 21,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "purchasing",
+            "document_genre": "email",
+            "stem": "The supplier offered a ______ explanation for the shipping delay.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "satisfy"
+              },
+              {
+                "key": "B",
+                "text": "satisfactory"
+              },
+              {
+                "key": "C",
+                "text": "satisfactorily"
+              },
+              {
+                "key": "D",
+                "text": "satisfaction"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "explanation을 수식하는 형용사 satisfactory가 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q22",
+            "question_no": 22,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "health",
+            "document_genre": "instruction",
+            "stem": "Employees should store all medical records in a ______ location.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "secure"
+              },
+              {
+                "key": "B",
+                "text": "securely"
+              },
+              {
+                "key": "C",
+                "text": "security"
+              },
+              {
+                "key": "D",
+                "text": "securing"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "location을 수식하는 형용사 secure가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q23",
+            "question_no": 23,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "business planning",
+            "document_genre": "report",
+            "stem": "The board approved the plan after a ______ discussion of projected costs.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "lengthy"
+              },
+              {
+                "key": "B",
+                "text": "length"
+              },
+              {
+                "key": "C",
+                "text": "lengthen"
+              },
+              {
+                "key": "D",
+                "text": "lengthily"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "discussion을 수식하는 형용사 lengthy가 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q24",
+            "question_no": 24,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "offices",
+            "document_genre": "notice",
+            "stem": "Visitors are asked to wait ______ in the lobby until their host arrives.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "quiet"
+              },
+              {
+                "key": "B",
+                "text": "quietly"
+              },
+              {
+                "key": "C",
+                "text": "quietness"
+              },
+              {
+                "key": "D",
+                "text": "quieter"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "동사 wait를 수식해야 하므로 부사 quietly가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q25",
+            "question_no": 25,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "travel",
+            "document_genre": "letter",
+            "stem": "The hotel provided ______ assistance when several guests requested late checkout.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "helpful"
+              },
+              {
+                "key": "B",
+                "text": "helpfully"
+              },
+              {
+                "key": "C",
+                "text": "helpfulness"
+              },
+              {
+                "key": "D",
+                "text": "help"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "assistance를 수식하는 형용사 helpful이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q26",
+            "question_no": 26,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "finance",
+            "document_genre": "report",
+            "stem": "Before the merger, both firms conducted an ______ review of their financial records.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "internal"
+              },
+              {
+                "key": "B",
+                "text": "internally"
+              },
+              {
+                "key": "C",
+                "text": "intern"
+              },
+              {
+                "key": "D",
+                "text": "internship"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "review를 수식하는 형용사 internal이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q27",
+            "question_no": 27,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "purchasing",
+            "document_genre": "report",
+            "stem": "The purchasing department noted a steady ______ in raw material costs.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "increase"
+              },
+              {
+                "key": "B",
+                "text": "increasing"
+              },
+              {
+                "key": "C",
+                "text": "increased"
+              },
+              {
+                "key": "D",
+                "text": "increasingly"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "관사 a와 형용사 steady 뒤에 오는 명사 increase가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q28",
+            "question_no": 28,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "dining out",
+            "document_genre": "letter",
+            "stem": "The restaurant manager offered a ______ apology for the delay in serving the group reservation.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "sincere"
+              },
+              {
+                "key": "B",
+                "text": "sincerely"
+              },
+              {
+                "key": "C",
+                "text": "sincerity"
+              },
+              {
+                "key": "D",
+                "text": "insincerely"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "apology를 수식하는 형용사 sincere가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q29",
+            "question_no": 29,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "housing",
+            "document_genre": "form",
+            "stem": "The tenant submitted a ______ request for additional parking space.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "written"
+              },
+              {
+                "key": "B",
+                "text": "writing"
+              },
+              {
+                "key": "C",
+                "text": "writer"
+              },
+              {
+                "key": "D",
+                "text": "wrote"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "request를 수식하는 형용사 written이 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q30",
+            "question_no": 30,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "finance",
+            "document_genre": "article",
+            "stem": "Analysts are ______ optimistic about next quarter's earnings report.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "caution"
+              },
+              {
+                "key": "B",
+                "text": "cautious"
+              },
+              {
+                "key": "C",
+                "text": "cautiously"
+              },
+              {
+                "key": "D",
+                "text": "cautiousness"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "optimistic를 수식하는 부사 cautiously가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q31",
+            "question_no": 31,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "personnel",
+            "document_genre": "report",
+            "stem": "The HR director praised the team for its ______ handling of the recruitment fair.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "professional"
+              },
+              {
+                "key": "B",
+                "text": "profession"
+              },
+              {
+                "key": "C",
+                "text": "professionally"
+              },
+              {
+                "key": "D",
+                "text": "professionalism"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "handling을 수식하는 형용사 professional이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q32",
+            "question_no": 32,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "general business",
+            "document_genre": "report",
+            "stem": "The report is ______ ready for submission to the client.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "near"
+              },
+              {
+                "key": "B",
+                "text": "nearly"
+              },
+              {
+                "key": "C",
+                "text": "nearness"
+              },
+              {
+                "key": "D",
+                "text": "nearest"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "형용사 ready를 수식해야 하므로 부사 nearly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q33",
+            "question_no": 33,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "warranties",
+            "document_genre": "information page",
+            "stem": "The new warranty policy gives buyers ______ protection against manufacturing defects.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "additional"
+              },
+              {
+                "key": "B",
+                "text": "additionally"
+              },
+              {
+                "key": "C",
+                "text": "addition"
+              },
+              {
+                "key": "D",
+                "text": "additive"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "protection을 수식하는 형용사 additional이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q34",
+            "question_no": 34,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "conferences",
+            "document_genre": "article",
+            "stem": "The keynote speaker gave a ______ answer to each audience question.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "direct"
+              },
+              {
+                "key": "B",
+                "text": "directly"
+              },
+              {
+                "key": "C",
+                "text": "direction"
+              },
+              {
+                "key": "D",
+                "text": "directive"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "answer를 수식하는 형용사 direct가 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q35",
+            "question_no": 35,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "finance",
+            "document_genre": "form",
+            "stem": "Management requested ______ documentation before releasing the insurance payment.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "further"
+              },
+              {
+                "key": "B",
+                "text": "furthermore"
+              },
+              {
+                "key": "C",
+                "text": "furthest"
+              },
+              {
+                "key": "D",
+                "text": "furtherance"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "documentation을 수식하는 형용사 further가 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q36",
+            "question_no": 36,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "negotiations",
+            "document_genre": "report",
+            "stem": "The negotiations proceeded ______ once both sides agreed on the delivery schedule.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "smooth"
+              },
+              {
+                "key": "B",
+                "text": "smoothly"
+              },
+              {
+                "key": "C",
+                "text": "smoothness"
+              },
+              {
+                "key": "D",
+                "text": "smoother"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "동사 proceeded를 수식하므로 부사 smoothly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q37",
+            "question_no": 37,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "sales",
+            "document_genre": "report",
+            "stem": "A ______ increase in online orders is expected during the holiday sale.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "gradual"
+              },
+              {
+                "key": "B",
+                "text": "gradually"
+              },
+              {
+                "key": "C",
+                "text": "gradualness"
+              },
+              {
+                "key": "D",
+                "text": "graduate"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "increase를 수식하는 형용사 gradual이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q38",
+            "question_no": 38,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "personnel",
+            "document_genre": "form",
+            "stem": "The company received several ______ for the vacant accounting position.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "apply"
+              },
+              {
+                "key": "B",
+                "text": "applicant"
+              },
+              {
+                "key": "C",
+                "text": "applications"
+              },
+              {
+                "key": "D",
+                "text": "applied"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "several 뒤 복수 명사 applications가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q39",
+            "question_no": 39,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "health",
+            "document_genre": "instruction",
+            "stem": "For safety reasons, all laboratory equipment must remain ______ after use.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "cleanliness"
+              },
+              {
+                "key": "B",
+                "text": "clean"
+              },
+              {
+                "key": "C",
+                "text": "cleanly"
+              },
+              {
+                "key": "D",
+                "text": "cleaner"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "remain 뒤 보어 자리이므로 형용사 clean이 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q40",
+            "question_no": 40,
+            "part": "Part 5",
+            "question_type": "parts of speech",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "entertainment",
+            "document_genre": "schedule",
+            "stem": "The entertainment committee planned an ______ program for the annual company picnic.",
+            "choices": [
+              {
+                "key": "A",
+                "text": "enjoyable"
+              },
+              {
+                "key": "B",
+                "text": "enjoyably"
+              },
+              {
+                "key": "C",
+                "text": "enjoyment"
+              },
+              {
+                "key": "D",
+                "text": "enjoy"
+              }
+            ],
+            "correct_answer": "A",
+            "explanation": "program을 수식하는 형용사 enjoyable이 가장 적절하다."
+          }
+        ],
+        "answer_key": [
+          {
+            "item_id": "drill-p5-pos-b001-q01",
+            "question_no": 1,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q02",
+            "question_no": 2,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q03",
+            "question_no": 3,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q04",
+            "question_no": 4,
+            "correct_answer": "D"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q05",
+            "question_no": 5,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q06",
+            "question_no": 6,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q07",
+            "question_no": 7,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q08",
+            "question_no": 8,
+            "correct_answer": "D"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q09",
+            "question_no": 9,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q10",
+            "question_no": 10,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q11",
+            "question_no": 11,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q12",
+            "question_no": 12,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q13",
+            "question_no": 13,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q14",
+            "question_no": 14,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q15",
+            "question_no": 15,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q16",
+            "question_no": 16,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q17",
+            "question_no": 17,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q18",
+            "question_no": 18,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q19",
+            "question_no": 19,
+            "correct_answer": "D"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q20",
+            "question_no": 20,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q21",
+            "question_no": 21,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q22",
+            "question_no": 22,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q23",
+            "question_no": 23,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q24",
+            "question_no": 24,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q25",
+            "question_no": 25,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q26",
+            "question_no": 26,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q27",
+            "question_no": 27,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q28",
+            "question_no": 28,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q29",
+            "question_no": 29,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q30",
+            "question_no": 30,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q31",
+            "question_no": 31,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q32",
+            "question_no": 32,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q33",
+            "question_no": 33,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q34",
+            "question_no": 34,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q35",
+            "question_no": 35,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q36",
+            "question_no": 36,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q37",
+            "question_no": 37,
+            "correct_answer": "A"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q38",
+            "question_no": 38,
+            "correct_answer": "C"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q39",
+            "question_no": 39,
+            "correct_answer": "B"
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q40",
+            "question_no": 40,
+            "correct_answer": "A"
+          }
+        ],
+        "rationale": [
+          {
+            "item_id": "drill-p5-pos-b001-q01",
+            "question_no": 1,
+            "korean_explanation": "관사 뒤에서 consultant를 수식하므로 형용사 specialized가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q02",
+            "question_no": 2,
+            "korean_explanation": "전치사 with 뒤 목적어 자리에 명사 accuracy가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q03",
+            "question_no": 3,
+            "korean_explanation": "be동사 뒤 보어 자리이므로 형용사 practical이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q04",
+            "question_no": 4,
+            "korean_explanation": "명사 delays를 수식하는 형용사 extensive가 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q05",
+            "question_no": 5,
+            "korean_explanation": "관사 뒤에서 explanation을 수식하는 형용사 clear가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q06",
+            "question_no": 6,
+            "korean_explanation": "of 뒤 목적어 자리에 명사 satisfaction이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q07",
+            "question_no": 7,
+            "korean_explanation": "remain 뒤 보어 자리이므로 형용사 calm이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q08",
+            "question_no": 8,
+            "korean_explanation": "동사 responded를 수식해야 하므로 부사 promptly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q09",
+            "question_no": 9,
+            "korean_explanation": "명사 communication을 수식하는 형용사 effective가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q10",
+            "question_no": 10,
+            "korean_explanation": "show의 목적어 자리에 명사 identification이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q11",
+            "question_no": 11,
+            "korean_explanation": "명사 references를 수식하는 형용사 professional이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q12",
+            "question_no": 12,
+            "korean_explanation": "with great 뒤 목적어 자리에 명사 care가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q13",
+            "question_no": 13,
+            "korean_explanation": "동사 spoke를 수식해야 하므로 부사 confidently가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q14",
+            "question_no": 14,
+            "korean_explanation": "명사 instructions를 수식하므로 형용사 clear가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q15",
+            "question_no": 15,
+            "korean_explanation": "review를 수식하는 형용사 final이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q16",
+            "question_no": 16,
+            "korean_explanation": "명사 customers를 수식하는 형용사 potential이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q17",
+            "question_no": 17,
+            "korean_explanation": "with remarkable 뒤 목적어 자리에 명사 efficiency가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q18",
+            "question_no": 18,
+            "korean_explanation": "동사 respond를 수식하므로 부사 promptly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q19",
+            "question_no": 19,
+            "korean_explanation": "be동사 뒤 보어 자리에서 수동 의미를 나타내는 equipped가 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q20",
+            "question_no": 20,
+            "korean_explanation": "주어 자리에는 명사 registration이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q21",
+            "question_no": 21,
+            "korean_explanation": "explanation을 수식하는 형용사 satisfactory가 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q22",
+            "question_no": 22,
+            "korean_explanation": "location을 수식하는 형용사 secure가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q23",
+            "question_no": 23,
+            "korean_explanation": "discussion을 수식하는 형용사 lengthy가 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q24",
+            "question_no": 24,
+            "korean_explanation": "동사 wait를 수식해야 하므로 부사 quietly가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q25",
+            "question_no": 25,
+            "korean_explanation": "assistance를 수식하는 형용사 helpful이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q26",
+            "question_no": 26,
+            "korean_explanation": "review를 수식하는 형용사 internal이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q27",
+            "question_no": 27,
+            "korean_explanation": "관사 a와 형용사 steady 뒤에 오는 명사 increase가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q28",
+            "question_no": 28,
+            "korean_explanation": "apology를 수식하는 형용사 sincere가 필요하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q29",
+            "question_no": 29,
+            "korean_explanation": "request를 수식하는 형용사 written이 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q30",
+            "question_no": 30,
+            "korean_explanation": "optimistic를 수식하는 부사 cautiously가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q31",
+            "question_no": 31,
+            "korean_explanation": "handling을 수식하는 형용사 professional이 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q32",
+            "question_no": 32,
+            "korean_explanation": "형용사 ready를 수식해야 하므로 부사 nearly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q33",
+            "question_no": 33,
+            "korean_explanation": "protection을 수식하는 형용사 additional이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q34",
+            "question_no": 34,
+            "korean_explanation": "answer를 수식하는 형용사 direct가 가장 적절하다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q35",
+            "question_no": 35,
+            "korean_explanation": "documentation을 수식하는 형용사 further가 가장 자연스럽다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q36",
+            "question_no": 36,
+            "korean_explanation": "동사 proceeded를 수식하므로 부사 smoothly가 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q37",
+            "question_no": 37,
+            "korean_explanation": "increase를 수식하는 형용사 gradual이 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q38",
+            "question_no": 38,
+            "korean_explanation": "several 뒤 복수 명사 applications가 와야 한다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q39",
+            "question_no": 39,
+            "korean_explanation": "remain 뒤 보어 자리이므로 형용사 clean이 정답이다."
+          },
+          {
+            "item_id": "drill-p5-pos-b001-q40",
+            "question_no": 40,
+            "korean_explanation": "program을 수식하는 형용사 enjoyable이 가장 적절하다."
+          }
+        ],
+        "review_status": "reviewed",
+        "published_at": "2026-03-13T01:10:00+09:00"
+      }
+    ]
+  },
+  "events": [
+    {
+      "event_id": "codex-20260312-0001",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "rc_weakness.recomputed",
+      "entity_type": "rc_weakness_registry",
+      "entity_id": "baseline-rc-weaknesses",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "registry": [
+          {
+            "part": "Part 5",
+            "skill_tag": "grammar reaction",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 68,
+            "status": "active"
+          },
+          {
+            "part": "Part 6",
+            "skill_tag": "context completion",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 55,
+            "status": "watch"
+          },
+          {
+            "part": "Part 7",
+            "skill_tag": "paraphrase tracking",
+            "vocab_domain": "general business",
+            "attempt_count": 0,
+            "wrong_count": 0,
+            "accuracy": 0,
+            "repeat_confusion_count": 0,
+            "latest_exposure": null,
+            "priority_score": 70,
+            "status": "active"
+          }
+        ]
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0002",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "recommendation.published",
+      "entity_type": "recommendation_snapshot",
+      "entity_id": "baseline-rc-recommendation",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "recommendations": [
+          {
+            "slot": "지금 가장 먼저 보강할 RC 항목",
+            "what": "Part 5 품사/동사 반응 추적 시작",
+            "why": "문항 단위 기록이 아직 없어 초기 병목부터 우선 추적해야 함",
+            "evidence": "RC 시작 프로필",
+            "strength": "high"
+          },
+          {
+            "slot": "다음 세션에서 다시 볼 RC 항목",
+            "what": "Part 7 근거 위치와 패러프레이즈 질문 묶음 정리",
+            "why": "반복 혼동 개념이 쌓일 때 가장 직접적으로 추천 품질이 올라감",
+            "evidence": "RC 시작 프로필",
+            "strength": "high"
+          },
+          {
+            "slot": "당장 보류할 RC 항목",
+            "what": "Part 6 sentence insertion 집중 생성",
+            "why": "우선 문항 기록과 약점 분류가 먼저 필요함",
+            "evidence": "기록 부족",
+            "strength": "medium"
+          }
+        ]
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0003",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "dashboard.published",
+      "entity_type": "progress_dashboard",
+      "entity_id": "baseline-dashboard",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "project_status": "적응형 추적 활성",
+        "recent_session": "없음",
+        "recent_attempt": "없음",
+        "rc_focus": [
+          {
+            "part": "Part 5",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 문법 반응 병목",
+            "strength": "high"
+          },
+          {
+            "part": "Part 6",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 문맥 연결 병목",
+            "strength": "medium"
+          },
+          {
+            "part": "Part 7",
+            "status": "초기 추적",
+            "reason": "RC 시작 프로필상 패러프레이즈·근거 위치 병목",
+            "strength": "high"
+          }
+        ],
+        "repeated_confusions": [],
+        "recent_improvement_signals": []
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "codex-20260312-0004",
+      "timestamp": "2026-03-12T12:00:00+09:00",
+      "actor": "codex",
+      "event_type": "sync.accepted",
+      "entity_type": "sync_revision",
+      "entity_id": "revision-1",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "accepted_revision": 1,
+        "reason": "초기 RC 웹 연동 기준 파일 생성"
+      },
+      "supersedes_event_id": null
+    },
+    {
+      "event_id": "drill-set-published-1773379694391-001",
+      "timestamp": "2026-03-13T05:28:14.389Z",
+      "actor": "codex",
+      "event_type": "drill_set.published",
+      "entity_type": "drill_set",
+      "entity_id": "drill-p5-parts-of-speech-batch-001",
+      "session_id": "unknown",
+      "attempt_id": "unknown",
+      "payload": {
+        "set_id": "drill-p5-parts-of-speech-batch-001",
+        "title": "Part 5 Parts of Speech Reaction Batch 001",
+        "target_part": "Part 5",
+        "target_skill": "parts of speech",
+        "difficulty": "medium",
+        "item_count": 40,
+        "review_status": "reviewed"
+      },
+      "supersedes_event_id": null
+    }
+  ]
+}

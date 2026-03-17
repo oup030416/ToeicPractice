@@ -2,6 +2,8 @@
 
 이 문서는 RC 보강 문제를 대량으로 만들어내기 위한 생성 환경의 기준 문서다.
 
+공통 문제 제작 원칙과 배치 운영 기준은 `docs/14_item_production_playbook.md`를 함께 따른다.
+
 ## 기본 원칙
 - RC 전용으로만 생성한다.
 - 공식 앵커를 먼저 잡고, 그 위에서 extraction, transform, synthetic-lite 순으로만 확장한다.
@@ -35,14 +37,20 @@
 - 점수 추정
 
 ## 출력 계약
-- `source_anchor`
-- `target_part`
-- `target_skill`
-- `generation_mode`
-- `difficulty`
-- `answer_key`
-- `rationale`
-- `review_status: pending`
+- RC 생성물 기본 출력은 `sync/toeic_web_sync.json`의 `materials.drill_sets[]` 규격을 따른 JSON이다.
+- 필수 필드:
+  - `set_id`
+  - `title`
+  - `source_anchor`
+  - `generation_mode`
+  - `target_part`
+  - `target_skill`
+  - `difficulty`
+  - `items`
+  - `answer_key`
+  - `rationale`
+  - `review_status`
+  - `published_at`
 
 ## 검수 규칙
 - 최종 사용자 전달 전 `toeic-review-auditor`를 반드시 거친다.

@@ -1,0 +1,17 @@
+{
+  "name": "toeic-workspace-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:export-drills": "npx tsx scripts/sync-export-drills.ts",
+    "test:tools": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

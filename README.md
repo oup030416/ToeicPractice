@@ -15,9 +15,10 @@
 4. `docs/04_adaptive_recommendation_model.md` 확인
 5. `docs/05_skill_system.md` 확인
 6. `docs/07_qna_thread_protocol.md` 확인
-7. RC 웹 연동이 필요하면 `docs/11_web_exchange_spec.md`, `docs/12_web_sync_workflow.md` 확인
-8. `tracking/progress_dashboard.md` 확인
-9. 필요하면 `logs/sessions/`와 `logs/attempts/`에 새 기록 추가
+7. 문제 대량 생산이 필요하면 `docs/14_item_production_playbook.md` 확인
+8. RC 웹 연동이 필요하면 `docs/11_web_exchange_spec.md`, `docs/12_web_sync_workflow.md` 확인
+9. `tracking/progress_dashboard.md` 확인
+10. 필요하면 `logs/sessions/`와 `logs/attempts/`에 새 기록 추가
 
 ## 폴더 구성
 - `AGENTS.md`: 이 워크스페이스의 고정 운영 규칙
@@ -28,13 +29,17 @@
 - `logs/sessions/`: 세션 기록
 - `logs/attempts/`: 실제 풀이 및 시도 기록
 - `sync/`: 웹사이트와 주고받는 단일 교환 파일
-- `materials/`: 자료 보관 가이드
+- `materials/`: 자료 보관 가이드와 개별 drill_set JSON 저장소
 
 ## Skill 계층
 - 실제 Skill 파일은 `C:\Users\demel\.codex\skills\` 아래에 설치되어 있다.
 - 운영 설명은 `docs/05_skill_system.md`에 정리되어 있다.
 - OpenAI 및 Anthropic 공식 근거는 `docs/06_skill_official_basis.md`에 정리되어 있다.
 - 빠른 질문용 별도 스레드는 `docs/07_qna_thread_protocol.md` 기준으로 운영한다.
+- 문제 대량 생산 기준은 `docs/14_item_production_playbook.md`와 `templates/problem_batch_request_template.md`를 따른다.
+- export 유틸은 루트 `package.json`의 `sync:export-drills` 명령으로 실행한다.
+- drill_set 저장은 여러 파일 분할보다 기존 세트 JSON 누적 확장을 기본 원칙으로 한다.
+- 사용자 지시 `json 작업 시작`은 현재 저장된 drill_set을 통합해 export 파일을 만드는 실행 신호로 취급한다.
 
 ## 운영 원칙
 - 고정 일수나 고정 시간 목표를 강제하지 않는다.

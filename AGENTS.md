@@ -95,13 +95,22 @@
 5. 전략 또는 규칙 변경이 있었다면 `tracking/strategy_change_log.md`
 6. 웹사이트와 다시 교환해야 하면 마지막에 `sync/toeic_web_sync.json`을 갱신한다.
 
+## WEB 자동 커밋 규칙
+1. `WEB/` 폴더 내부에서 변경이 생기면 자동 커밋 대상으로 취급한다.
+2. 자동 커밋에는 `WEB/` pathspec만 포함한다.
+3. 루트 문서, `docs/`, `logs/`, `tracking/`, `sync/` 등 상위 폴더나 형제 폴더 변경사항은 자동 커밋에 절대 포함하지 않는다.
+4. `WEB/` 자동 커밋은 웹 프런트엔드 관련 파일에만 적용한다.
+5. `WEB/` 밖 변경사항은 사용자의 별도 지시가 있을 때만 수동으로 검토하거나 커밋한다.
+
 ## Q&A 메모리 반영 규칙
 1. Q&A 스레드는 별도 스레드로 운용하되, 메모리는 이 프로젝트 폴더 문서가 담당한다.
-2. 모든 질문은 `tracking/qna_master_log.md`에 append-only로 남긴다.
-3. 반복 가치가 있는 개념은 `knowledge/concept_index.md`와 `knowledge/concepts/` 아래 카드로 승격한다.
-4. 저위험 반영 항목은 `tracking/review_queue.md`에 자동 기록한다.
-5. 추천 규칙이나 자료 정책에 영향을 주는 항목은 `tracking/strategy_change_log.md`에 남긴다.
-6. 아래 항목은 자동반영하지 않고 승인 대기로만 남긴다.
+2. Q&A 스레드에서는 사용자의 궁금한 점에 대한 답변과 대화 흐름을 우선한다.
+3. 메모리 반영은 답변 직후에 진행하되, 같은 턴 안에서 가능한 한 바로 이어서 처리한다.
+4. 모든 질문은 `tracking/qna_master_log.md`에 append-only로 남긴다.
+5. 반복 가치가 있는 개념은 `knowledge/concept_index.md`와 `knowledge/concepts/` 아래 카드로 승격한다.
+6. 저위험 반영 항목은 `tracking/review_queue.md`에 자동 기록한다.
+7. 추천 규칙이나 자료 정책에 영향을 주는 항목은 `tracking/strategy_change_log.md`에 남긴다.
+8. 아래 항목은 자동반영하지 않고 승인 대기로만 남긴다.
    - 공식 사실 해석 변경
    - 새 자료 도입
    - 새 자동화 또는 새 Skill 도입

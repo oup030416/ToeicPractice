@@ -5,6 +5,9 @@
 | 개념 | 카드 파일 | 관련 파트 | 질문 횟수 | 마지막 갱신일 | 상태 |
 | --- | --- | --- | --- | --- | --- |
 | LC 딕테이션 루틴 | [knowledge/concepts/lc_dictation_routine.md](C:/Users/demel/OneDrive/Desktop/o/Study/English/TOEIC/knowledge/concepts/lc_dictation_routine.md) | Part 2/3/4 | 1 | 2026-03-12 | active |
+| tie 진행형 철자 | [knowledge/concepts/tie_ing_spelling.md](C:/Users/demel/OneDrive/Desktop/o/Study/English/TOEIC/knowledge/concepts/tie_ing_spelling.md) | grammar | 1 | 2026-03-13 | active |
+| LC 놓친 단어 이후 복구 | [knowledge/concepts/lc_recovery_after_miss.md](C:/Users/demel/OneDrive/Desktop/o/Study/English/TOEIC/knowledge/concepts/lc_recovery_after_miss.md) | Part 3/4 | 1 | 2026-03-13 | active |
+| LC 작업기억 유지 | [knowledge/concepts/lc_working_memory_compression.md](C:/Users/demel/OneDrive/Desktop/o/Study/English/TOEIC/knowledge/concepts/lc_working_memory_compression.md) | Part 2/3/4 | 1 | 2026-03-13 | active |
 
 ## 상태 기준
 - `active`: 현재 계속 참조 중
